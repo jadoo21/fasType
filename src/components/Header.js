@@ -32,23 +32,23 @@ function Header() {
       <Collapse isOpen={isOpen} navbar>
         <Nav className="ml-auto" navbar>
           <NavItem>
-            <NavLink to="/">Home</NavLink>
+            <NavLink href="/">Home</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink to="/about">About</NavLink>
+            <NavLink href="/about">About</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink to="/contact">Contact</NavLink>
+            <NavLink href="/contact">Contact</NavLink>
           </NavItem>
           {isLoggedIn ? (
             <Button color="secondary" onClick={() => { /*logout function*/ }}>Logout</Button>
           ) : (
             <>
               <NavItem>
-                <NavLink to="/login">Login</NavLink>
+                <NavLink href="/login">Login</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/signup">Signup</NavLink>
+                <NavLink href="/signup">Signup</NavLink>
               </NavItem>
             </>
           )}

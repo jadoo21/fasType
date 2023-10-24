@@ -1,70 +1,99 @@
-# Getting Started with Create React App
+# fasType
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# UI Flow
 
-## Available Scripts
+### Header:
 
-In the project directory, you can run:
+- Logo or application name
+- Navigation links (Home, About, Contact, etc.)
+- Login and Signup buttons (on the right side)
 
-### `npm start`
+### Footer:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Copyright information
+- Additional links or relevant information
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Main Content Area:
 
-### `npm test`
+- Container or section to hold the main content
+- Card component for the typing exercise
+    - Display a paragraph for the user to type
+    - Input field for the user to enter their typed text
+    - Timer to track the typing speed
+    - Submit button to check the typed text and calculate statistics
+    - Success or error message indicating if the typed text was correct or not
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Statistics Section:
 
-### `npm run build`
+- Graph or visual representation of the user's typing statistics
+- Display relevant information such as typing speed, accuracy, and progress over time
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Based on the user's login status, the application behavior can be as follows:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **Not logged in:**
+- The user can still access the typing exercise and practice typing.
+- However, the details of their typing (such as speed, accuracy, etc.) will not be saved in the database.
+- The statistics section may display a message suggesting users to log in for enhanced features and personalized statistics.
+1. **Logged in:**
+- The user can access the typing exercise, and their typing details will be saved in the database.
+- The statistics section will display personalized graphs and visualizations based on the user's typing history.
+- Users can view their historical typing data, track progress, and compare statistics over time.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<aside>
+💡 Implement the authentication and authorization mechanisms to handle user registration, login, and session management. This will ensure that only logged-in users can access personalized statistics and that their typing data is securely saved in the database.
 
-### `npm run eject`
+</aside>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Folder Structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+/src
+  /api
+    - api.js (Axios API calls)
+  /components
+    /Header
+      - Header.jsx
+    /Footer
+      - Footer.jsx
+    /Card
+      - Card.jsx
+    /Statistics
+      - Statistics.jsx
+  /context
+    - AuthContext.js (Context provider for authentication state using Context API)
+  /redux
+    /actions
+      - authActions.js (Redux actions for authentication state)
+    /reducers
+      - authReducer.js (Redux reducer for authentication state)
+    /store
+      - configureStore.js (Redux store configuration)
+  /pages
+    - Home.jsx (Main page with the typing exercise and statistics)
+    - Login.jsx (Login page)
+    - Signup.jsx (Signup page)
+  /utils
+    - axios.js (Axios instance setup)
+  /styles
+    - main.css (Global styles)
+  /config
+    - env.js (Environment variables)
+  - App.jsx (Root component)
+  - index.js (Entry point)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+/public
+  - index.html
+  - favicon.ico
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Context API or Redux
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Context API for local component state:
+    - Use the Context API for managing local component state or state that doesn't need to be shared across the entire application.
+    - You can create context providers and consumers for specific components or smaller sections of your application.
+    - This can be useful for managing UI-related state, form inputs, or any state that is not critical to the overall application state.
+2.  Redux for global application state:
+    - Use Redux for managing the global application state or state that needs to be shared and accessed by multiple components.
+    - Set up a centralized Redux store to hold your application's state.
+    - Define actions and reducers to handle state updates and interactions with the Redux store.
+    - Use Redux's connect or useSelector and useDispatch hooks to connect your components to the Redux store and access the global state.

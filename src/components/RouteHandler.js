@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
-import Login from '../pages/Login';
-import Signup from '../pages/Signup';
+import Login from '../pages/login';
+import Signup from '../pages/signup';
 
 const RouteHandler = () => {
   let routes = useRoutes([

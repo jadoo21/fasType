@@ -1,5 +1,13 @@
+body, html {
+  height: 90%;
+  margin: 0;
+}
+
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .App-logo {

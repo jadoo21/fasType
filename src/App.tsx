@@ -9,7 +9,9 @@ function App() {
     <>
       <div className="App">
         <Header />
-        <RouteHandler />
+        <div className="App-content">
+          <RouteHandler />
+        </div>
       </div>
       <Footer />
     </>

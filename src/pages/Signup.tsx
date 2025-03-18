@@ -1,35 +1,42 @@
-// src/pages/Signup.js
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import { Card, CardBody, CardTitle, Form, FormGroup, Input, Button, FormFeedback } from 'reactstrap';
 import '../styles/signup.css';
-// import { signup } from '../api/auth';
-// import { createUser, createSignupData } from '../models/user';
-// import { useAuth } from '../contexts/AuthContext';
+
+type InputType = 'text' | 'email' | 'password' | 'tel';
+
+interface FormData {
+  username: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string;
+}
 
 function Signup() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     username: "",
     email: "",
     phoneNumber: "",
     password: "",
     confirmPassword: ""
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Partial<FormData>>({});
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData(prevData => ({
       ...prevData,
       [id]: value
     }));
     // Clear error when user starts typing
-    if (errors[id]) {
+    if (errors[id as keyof FormData]) {
       setErrors(prevErrors => ({ ...prevErrors, [id]: '' }));
     }
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: Partial<FormData> = {};
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
@@ -37,7 +44,7 @@ function Signup() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -53,12 +60,12 @@ function Signup() {
     }
   };
 
-  const renderField = (field) => {
+  const renderField = (field: keyof FormData) => {
     const fieldProps = {
-      type: field === 'password' || field === 'confirmPassword' ? 'password' 
+      type: (field === 'password' || field === 'confirmPassword' ? 'password' 
            : field === 'email' ? 'email'
            : field === 'phoneNumber' ? 'tel'
-           : 'text',
+           : 'text') as InputType,
       id: field,
       placeholder: field.split(/(?=[A-Z])/).join(' ').charAt(0).toUpperCase() + field.split(/(?=[A-Z])/).join(' ').slice(1),
       value: formData[field],
@@ -67,11 +74,11 @@ function Signup() {
       required: true
     };
     return (
-              <FormGroup key={field}>
+      <FormGroup key={field}>
         <Input {...fieldProps} />
         {errors[field] && <FormFeedback>{errors[field]}</FormFeedback>}
-            </FormGroup>
-  );
+      </FormGroup>
+    );
   };
 
   return (
@@ -80,7 +87,7 @@ function Signup() {
         <CardBody>
           <CardTitle className="text-center">Sign Up</CardTitle>
           <Form onSubmit={handleSubmit}>
-            {Object.keys(formData).map(renderField)}
+            {Object.keys(formData).map(field => renderField(field as keyof FormData))}
             <Button className='card-button' color="dark" block>Sign Up</Button>
           </Form>
         </CardBody>

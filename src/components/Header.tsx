@@ -10,18 +10,11 @@ import {
   Button 
 } from 'reactstrap';
 
-// If you're using Context API for authentication state
-// import { AuthContext } from '../context/AuthContext';
-
 function Header() {
-  // If you're using Context API for authentication state
-  // const { isLoggedIn, logout } = useContext(AuthContext);
-
   const [isOpen, setIsOpen] = useState(false);
   const toggleNavbar = () => setIsOpen(!isOpen);
 
-  // Placeholder for checking if a user is logged in. Replace with actual logic.
-  const isLoggedIn = false;  // Placeholder, use the context or redux state for actual value
+  const isLoggedIn = false;
 
   return (
     <Navbar color="dark" dark expand="md">

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Container, Row, Col, Navbar } from 'reactstrap';
 
 function Footer() {

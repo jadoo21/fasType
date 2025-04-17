@@ -1,0 +1,20 @@
+.footer {
+    padding: 20px 0;
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer h5 {
+    margin-bottom: 10px;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 14px;
+    color: #adb5bd;
+}

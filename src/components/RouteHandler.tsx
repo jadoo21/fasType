@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { useRoutes } from 'react-router-dom';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';

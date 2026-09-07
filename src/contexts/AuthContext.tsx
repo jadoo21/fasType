@@ -1,12 +1,13 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { User } from '../types';
+import { authApi } from '../services/api';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signup: (data: { username: string; email: string; password: string }) => Promise<{ success: boolean; error?: string }>;
-  logout: () => void;
+  logout: () => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -33,75 +34,42 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(false);
   }, []);
 
-  const login = async (email: string, _password: string): Promise<{ success: boolean; error?: string }> => {
+  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     setLoading(true);
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    // Mock login validation
-    if (!email || !_password) {
+    try {
+      if (!email || !password) return { success: false, error: 'Please fill in all fields' };
+      const response = await authApi.login({ email, password });
+      if (!response.success || !response.data) return { success: false, error: response.error || 'Login failed' };
+      setUser(response.data.user);
+      localStorage.setItem('fastype_user', JSON.stringify(response.data.user));
+      localStorage.setItem('fastype_token', response.data.token);
+      return { success: true };
+    } finally {
       setLoading(false);
-      return { success: false, error: 'Please fill in all fields' };
     }
-
-    // Mock successful login
-    const mockUser: User = {
-      id: '1',
-      username: email.split('@')[0],
-      email: email,
-      firstName: email.split('@')[0],
-      lastName: 'User',
-      createdAt: new Date().toISOString(),
-      bestWpm: 72,
-      averageWpm: 65,
-      averageAccuracy: 96,
-      testsCompleted: 28,
-    };
-
-    setUser(mockUser);
-    localStorage.setItem('fastype_user', JSON.stringify(mockUser));
-    setLoading(false);
-    return { success: true };
   };
 
   const signup = async (data: { username: string; email: string; password: string }): Promise<{ success: boolean; error?: string }> => {
     setLoading(true);
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Mock signup validation
-    if (!data.username || !data.email || !data.password) {
+    try {
+      if (!data.username || !data.email || !data.password) return { success: false, error: 'Please fill in all fields' };
+      if (data.password.length < 8) return { success: false, error: 'Password must be at least 8 characters' };
+      const response = await authApi.signup(data);
+      if (!response.success || !response.data) return { success: false, error: response.error || 'Signup failed' };
+      setUser(response.data.user);
+      localStorage.setItem('fastype_user', JSON.stringify(response.data.user));
+      localStorage.setItem('fastype_token', response.data.token);
+      return { success: true };
+    } finally {
       setLoading(false);
-      return { success: false, error: 'Please fill in all fields' };
     }
-
-    if (data.password.length < 8) {
-      setLoading(false);
-      return { success: false, error: 'Password must be at least 8 characters' };
-    }
-
-    // Mock successful signup
-    const mockUser: User = {
-      id: Date.now().toString(),
-      username: data.username,
-      email: data.email,
-      firstName: data.username,
-      createdAt: new Date().toISOString(),
-      bestWpm: 0,
-      averageWpm: 0,
-      averageAccuracy: 0,
-      testsCompleted: 0,
-    };
-
-    setUser(mockUser);
-    localStorage.setItem('fastype_user', JSON.stringify(mockUser));
-    setLoading(false);
-    return { success: true };
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await authApi.logout();
     setUser(null);
     localStorage.removeItem('fastype_user');
+    localStorage.removeItem('fastype_token');
   };
 
   return (

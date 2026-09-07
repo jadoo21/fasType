@@ -1,23 +1,28 @@
 import * as React from 'react';
-import { useRoutes } from 'react-router-dom';
+import { Navigate, useRoutes } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Statistics from '../pages/Statistics';
 import About from '../pages/About';
 import Contact from '../pages/Contact';
+import { useAuth } from '../contexts/AuthContext';
 
 const RouteHandler = () => {
-  let routes = useRoutes([
+  const { isAuthenticated, loading } = useAuth();
+  const routes = useRoutes([
     { path: "/", element: <Home /> },
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <Signup /> },
-    { path: "/statistics", element: <Statistics /> },
+    {
+      path: "/statistics",
+      element: loading ? null : isAuthenticated ? <Statistics /> : <Navigate to="/login" replace />,
+    },
     { path: "/about", element: <About /> },
     { path: "/contact", element: <Contact /> },
   ]);
 
-  return routes;
+  return routes || <Navigate to="/" replace />;
 };
 
 export default RouteHandler;

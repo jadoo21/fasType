@@ -168,7 +168,7 @@ export const TypingTestProvider = ({ children }: TypingTestProviderProps) => {
   };
 
   const handleKeyPress = (key: string) => {
-    if (!state.isStarted || state.isCompleted) return;
+    if (state.isCompleted) return;
 
     // Ignore modifier keys
     if (['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab', 'Escape'].includes(key)) {
@@ -190,25 +190,30 @@ export const TypingTestProvider = ({ children }: TypingTestProviderProps) => {
     // Only process single character keys
     if (key.length !== 1) return;
 
-    const expectedChar = state.text[state.currentIndex];
-    const isCorrect = key === expectedChar;
-
     setState(prev => {
+      const startedAt = prev.startTime ?? Date.now();
+      const expectedChar = prev.text[prev.currentIndex];
+      const isCorrect = key === expectedChar;
       const newIndex = prev.currentIndex + 1;
       const newTypedText = prev.typedText + key;
       const newErrors = isCorrect ? prev.errors : prev.errors + 1;
       const totalTyped = newIndex;
       const correctTyped = totalTyped - newErrors;
       const newAccuracy = totalTyped > 0 ? Math.round((correctTyped / totalTyped) * 100) : 100;
+      const elapsedMinutes = Math.max((Date.now() - startedAt) / 60000, 1 / 60000);
+      const newWpm = Math.round((newIndex / 5) / elapsedMinutes);
 
       // Check if test is complete
       if (newIndex >= prev.text.length) {
         return {
           ...prev,
+          isStarted: true,
+          startTime: startedAt,
           currentIndex: newIndex,
           typedText: newTypedText,
           errors: newErrors,
           accuracy: newAccuracy,
+          wpm: newWpm,
           isCompleted: true,
           endTime: Date.now(),
         };
@@ -216,10 +221,13 @@ export const TypingTestProvider = ({ children }: TypingTestProviderProps) => {
 
       return {
         ...prev,
+        isStarted: true,
+        startTime: startedAt,
         currentIndex: newIndex,
         typedText: newTypedText,
         errors: newErrors,
         accuracy: newAccuracy,
+        wpm: newWpm,
       };
     });
   };
@@ -252,11 +260,16 @@ export const TypingTestProvider = ({ children }: TypingTestProviderProps) => {
   };
 
   const completeTest = () => {
-    setState(prev => ({
-      ...prev,
-      isCompleted: true,
-      endTime: Date.now(),
-    }));
+    setState(prev => {
+      const endTime = Date.now();
+      const elapsedMinutes = prev.startTime ? Math.max((endTime - prev.startTime) / 60000, 1 / 60000) : 1;
+      return {
+        ...prev,
+        wpm: Math.round((prev.currentIndex / 5) / elapsedMinutes),
+        isCompleted: true,
+        endTime,
+      };
+    });
   };
 
   return (

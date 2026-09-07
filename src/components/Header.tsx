@@ -11,37 +11,35 @@ function Header() {
 
   const navLinks = [
     { path: '/', label: 'Home' },
-    { path: '/statistics', label: 'Statistics' },
     { path: '/about', label: 'About' },
+    { path: '/statistics', label: 'Statistics' },
     { path: '/contact', label: 'Contact' },
   ];
 
   return (
-    <header className="bg-surface-container-lowest border-b border-outline-variant/80 sticky top-0 z-40">
-      <div className="container-max px-gutter-desktop h-16 flex items-center justify-between w-full">
+    <header className="bg-surface-container-lowest border-b border-outline-variant/80 sticky top-0 z-40 shadow-sm">
+      <div className="container-max px-gutter-mobile md:px-gutter-desktop h-16 flex items-center justify-between w-full">
         {/* Brand Logo */}
         <div className="flex items-center space-x-3">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center font-mono font-bold shadow-sm transition-transform group-hover:scale-105">
-              <span className="material-symbols-outlined text-[18px]">keyboard</span>
-            </div>
-            <span className="font-headline font-bold text-xl tracking-tight text-primary">fasType</span>
+          <Link to="/" className="flex items-center gap-2 group text-primary">
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-on-primary font-label-mono-sm font-bold tracking-tighter transition-transform group-hover:scale-95">f_</span>
+            <span className="font-headline font-bold text-2xl tracking-tight">fasType</span>
           </Link>
-          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono text-[10px] tracking-wide border border-slate-200">
-            v2.4
+          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded bg-surface-container-low text-on-surface-variant font-label-mono-sm border border-outline-variant">
+            v2.4.0
           </span>
         </div>
 
         {/* Desktop Primary Links */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
               className={`font-body text-sm transition-all ${
                 isActive(link.path)
-                  ? 'font-semibold text-primary border-b-2 border-primary pb-1'
-                  : 'text-slate-600 hover:text-primary'
+                  ? 'font-medium text-primary border-b-2 border-primary pb-1'
+                  : 'text-on-surface-variant hover:text-primary'
               }`}
             >
               {link.label}
@@ -79,7 +77,7 @@ function Header() {
                   <span className="material-symbols-outlined text-[20px]">account_circle</span>
                 </Link>
                 <button
-                  onClick={logout}
+                  onClick={() => void logout()}
                   className="p-1.5 text-slate-600 hover:text-error hover:bg-rose-50 rounded-lg transition-colors"
                   title="Logout"
                 >
@@ -91,15 +89,23 @@ function Header() {
             <>
               {/* Anonymous State */}
               <div className="hidden md:flex items-center gap-2">
+                <div className="hidden lg:flex items-center gap-1 border-r border-outline-variant pr-3 mr-1">
+                  <button aria-label="Keyboard shortcuts" className="p-1.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-low">
+                    <span className="material-symbols-outlined text-[20px]">keyboard</span>
+                  </button>
+                  <button aria-label="Color theme" className="p-1.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-low">
+                    <span className="material-symbols-outlined text-[20px]">palette</span>
+                  </button>
+                </div>
                 <Link
                   to="/login"
-                  className="px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-700 hover:text-primary transition-colors"
+                  className="px-3 py-1.5 rounded-xl text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
                 >
                   Login
                 </Link>
                 <Link
                   to="/signup"
-                  className="px-4 py-1.5 rounded-lg text-sm font-medium bg-primary text-white hover:bg-slate-800 transition-all subtle-shadow"
+                  className="px-3.5 py-1.5 rounded-xl text-sm font-medium bg-primary text-white hover:bg-on-surface-variant transition-all subtle-shadow"
                 >
                   Sign Up
                 </Link>
@@ -110,6 +116,8 @@ function Header() {
           {/* Mobile Hamburger Button */}
           <button
             aria-label="Toggle menu"
+            aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
             className="md:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100"
             onClick={() => setIsOpen(!isOpen)}
           >
@@ -122,7 +130,7 @@ function Header() {
 
       {/* Responsive Mobile Drawer */}
       {isOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-2 shadow-lg">
+        <div id="mobile-navigation" className="md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-2 shadow-lg">
           {navLinks.map((link) => (
             <Link
               key={link.path}
@@ -143,7 +151,7 @@ function Header() {
               {user ? (
                 <button
                   onClick={() => {
-                    logout();
+                    void logout();
                     setIsOpen(false);
                   }}
                   className="text-xs font-semibold px-2.5 py-1 rounded bg-rose-50 text-rose-700"

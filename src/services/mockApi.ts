@@ -1,4 +1,4 @@
-import { User, TypingTestResult, StatisticsSummary, StatisticsTrend, ContactRequest, ApiResponse } from '../types';
+import { User, TypingTestResult, StatisticsSummary, StatisticsTrend, ContactRequest, ApiResponse, LoginRequest, SignupRequest } from '../types';
 
 // Simulated delay for mock API
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -40,7 +40,7 @@ initMockData();
 
 // Auth API
 export const authApi = {
-  login: async (email: string, password: string): Promise<ApiResponse<{ user: User; token: string }>> => {
+  login: async ({ email, password }: LoginRequest): Promise<ApiResponse<{ user: User; token: string }>> => {
     await delay(800);
     const user = mockUsers.get(email);
     if (!user || user.password !== password) {
@@ -50,7 +50,7 @@ export const authApi = {
     return { success: true, data: { user: userWithoutPassword, token: 'mock-jwt-token-' + Date.now() } };
   },
 
-  signup: async (data: { username: string; email: string; password: string }): Promise<ApiResponse<{ user: User; token: string }>> => {
+  signup: async (data: SignupRequest): Promise<ApiResponse<{ user: User; token: string }>> => {
     await delay(1000);
     if (mockUsers.has(data.email)) {
       return { success: false, error: 'Email already registered' };
@@ -147,7 +147,6 @@ export const contactApi = {
     if (Math.random() < 0.1) {
       return { success: false, error: 'Failed to send message. Please try again.' };
     }
-    console.log('Contact form submitted:', data);
     return { success: true };
   },
 };

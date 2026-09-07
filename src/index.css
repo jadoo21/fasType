@@ -3,6 +3,26 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
+    margin: 0;
+  }
+}
+
+@layer base {
   html {
     @apply antialiased;
   }
@@ -11,6 +31,13 @@
     @apply bg-background text-on-surface font-body text-body-md min-h-screen flex flex-col;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
   }
 
   ::selection {

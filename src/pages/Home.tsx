@@ -1,7 +1,8 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTypingTest } from '../contexts/TypingTestContext';
 import { useAuth } from '../contexts/AuthContext';
+import { typingTestApi } from '../services/api';
 
 function Home() {
   const {
@@ -26,23 +27,40 @@ function Home() {
   } = useTypingTest();
 
   const { user, isAuthenticated } = useAuth();
-
-  const onKeyDown = useCallback((e: KeyboardEvent) => {
-    if (isStarted && !isCompleted) {
-      handleKeyPress(e.key);
-    }
-  }, [isStarted, isCompleted, handleKeyPress]);
+  const [now, setNow] = useState(() => Date.now());
+  const submittedTestRef = useRef<string | null>(null);
 
   useEffect(() => {
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [onKeyDown]);
+    if (!isStarted || isCompleted) return;
+    const timer = window.setInterval(() => setNow(Date.now()), 250);
+    return () => window.clearInterval(timer);
+  }, [isStarted, isCompleted]);
 
-  const timeElapsed = startTime ? Math.floor((Date.now() - startTime) / 1000) : 0;
+  useEffect(() => {
+    if (!isCompleted) submittedTestRef.current = null;
+  }, [isCompleted]);
+
+  useEffect(() => {
+    if (!isCompleted || !isAuthenticated || !user || submittedTestRef.current === text) return;
+    submittedTestRef.current = text;
+    void typingTestApi.submitResult({
+      userId: user.id,
+      wpm,
+      accuracy,
+      errors,
+      totalCharacters: typedText.length,
+      correctCharacters: Math.max(typedText.length - errors, 0),
+      duration,
+      mode: `${duration}s / ${mode}`,
+      text,
+    });
+  }, [accuracy, duration, errors, isAuthenticated, isCompleted, mode, text, typedText.length, user, wpm]);
+
+  const timeElapsed = startTime ? Math.floor((now - startTime) / 1000) : 0;
   const timeProgress = (timeElapsed / duration) * 100;
 
   return (
-    <div className="max-w-container-max mx-auto px-gutter-desktop py-8 space-y-8">
+    <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-8 space-y-8">
       {/* Hero Header */}
       <section className="text-center max-w-3xl mx-auto space-y-3">
         {/* Badge */}
@@ -107,7 +125,7 @@ function Home() {
                 {d}s
               </button>
             ))}
-            <button className="px-3 py-1 rounded-lg text-xs font-mono font-medium text-slate-600 hover:text-slate-900 transition-all">
+            <button type="button" onClick={() => setDuration(120)} className="px-3 py-1 rounded-lg text-xs font-mono font-medium text-slate-600 hover:text-slate-900 transition-all">
               Custom
             </button>
           </div>
@@ -155,7 +173,7 @@ function Home() {
       </section>
 
       {/* Typing Test Card */}
-      <section className="max-w-4xl mx-auto">
+      <section className="max-w-6xl mx-auto w-full">
         <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden relative">
           {/* Card Header Bar */}
           <div className="px-6 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50/60">
@@ -177,6 +195,7 @@ function Home() {
               </div>
               <button
                 onClick={resetTest}
+                aria-label="Restart test"
                 className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all active:rotate-180"
                 title="Restart Test (Tab + Enter)"
               >
@@ -250,7 +269,7 @@ function Home() {
 
           {/* Typing Stream Arena */}
           <div className="p-6 sm:p-10 bg-white select-none relative cursor-text">
-            <div className="font-mono text-xl sm:text-2xl leading-relaxed tracking-wide transition-all">
+            <div className="font-type-test-stream-mobile sm:font-type-test-stream leading-relaxed tracking-wide transition-all">
               {text.split('').map((char, index) => (
                 <span key={index} className={getCharacterClass(index)}>
                   {char}
@@ -287,16 +306,15 @@ function Home() {
                 autoCorrect="off"
                 spellCheck={false}
                 placeholder="Start typing here..."
+                aria-label="Typing input"
                 className="w-full px-5 py-3.5 bg-white border border-slate-300 rounded-xl text-lg font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all subtle-shadow"
                 disabled={isCompleted}
                 value={typedText}
-                onChange={(e) => {
-                  if (!isStarted) startTest();
-                  const newValue = e.target.value;
-                  const lastChar = newValue[newValue.length - 1];
-                  if (lastChar) {
-                    handleKeyPress(lastChar);
-                  }
+                readOnly
+                onKeyDown={(e) => {
+                  if (e.key === 'Tab') return;
+                  e.preventDefault();
+                  handleKeyPress(e.key);
                 }}
               />
               <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
@@ -317,8 +335,27 @@ function Home() {
         </div>
       </section>
 
+      {isCompleted && (
+        <section aria-live="polite" className="max-w-6xl mx-auto w-full">
+          <div className="bg-primary-container text-inverse-on-surface rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+              <p className="font-label-mono-sm text-inverse-primary uppercase tracking-wider">Test complete</p>
+              <h2 className="text-headline-md font-headline-md mt-1">Nice work. Keep the rhythm.</h2>
+              <p className="text-body-sm text-inverse-primary mt-2">
+                {isAuthenticated ? 'Your result was added to your performance history.' : 'Create an account to save your result and track progress.'}
+              </p>
+            </div>
+            <div className="flex items-center gap-5 font-mono text-center">
+              <div><strong className="block text-3xl">{wpm}</strong><span className="text-xs text-inverse-primary">WPM</span></div>
+              <div><strong className="block text-3xl">{accuracy}%</strong><span className="text-xs text-inverse-primary">accuracy</span></div>
+              {!isAuthenticated && <Link to="/signup" className="rounded-xl bg-secondary px-4 py-2 text-sm font-semibold text-white">Save result</Link>}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Link to Statistics */}
-      <section className="max-w-4xl mx-auto text-center pt-2">
+      <section className="max-w-6xl mx-auto w-full text-center pt-2">
         <div className="p-4 rounded-xl bg-slate-100 border border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
           <div>
             <h4 className="font-headline font-semibold text-sm text-slate-900">Looking for deep trends and analytics?</h4>

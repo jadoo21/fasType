@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { statisticsApi } from '../services/mockApi';
+import { statisticsApi } from '../services/api';
 import { StatisticsSummary, StatisticsTrend } from '../types';
 import { Card, Button, Badge } from '../components/ui';
 
@@ -45,7 +45,7 @@ function Statistics() {
 
   if (!isAuthenticated) {
     return (
-      <div className="max-w-container-max mx-auto px-gutter-desktop py-12">
+      <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-12">
         <div className="bg-white p-12 rounded-2xl border border-slate-200 text-center space-y-4 card-shadow">
           <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto text-indigo-600">
             <span className="material-symbols-outlined text-[32px]">lock</span>
@@ -69,7 +69,7 @@ function Statistics() {
 
   if (loading) {
     return (
-      <div className="max-w-container-max mx-auto px-gutter-desktop py-12">
+      <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-12">
         <div className="flex items-center justify-center h-64">
           <div className="text-center space-y-4">
             <div className="w-12 h-12 rounded-full border-4 border-indigo-200 border-t-indigo-600 animate-spin mx-auto"></div>
@@ -82,7 +82,7 @@ function Statistics() {
 
   if (error) {
     return (
-      <div className="max-w-container-max mx-auto px-gutter-desktop py-12">
+      <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-12">
         <div className="bg-white p-12 rounded-2xl border border-slate-200 text-center space-y-4 card-shadow">
           <div className="w-16 h-16 rounded-2xl bg-rose-50 flex items-center justify-center mx-auto text-rose-600">
             <span className="material-symbols-outlined text-[32px]">error</span>
@@ -99,7 +99,7 @@ function Statistics() {
 
   if (!hasData) {
     return (
-      <div className="max-w-container-max mx-auto px-gutter-desktop py-12">
+      <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-12">
         <div className="bg-white p-12 rounded-2xl border border-slate-200 text-center space-y-4 card-shadow">
           <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto text-slate-500">
             <span className="material-symbols-outlined text-[32px]">query_stats</span>
@@ -119,8 +119,16 @@ function Statistics() {
     );
   }
 
+  const matrixKeys = [
+    { key: 'Q', value: `${Math.min(100, summary.averageAccuracy + 3)}%` },
+    { key: 'W', value: `${summary.averageAccuracy}%` },
+    { key: 'E', value: `${Math.max(0, summary.averageAccuracy - 1)}%` },
+    { key: 'R', value: `${Math.max(0, summary.averageAccuracy - 8)}%`, error: true },
+    { key: 'T', value: `${Math.max(0, summary.averageAccuracy - 2)}%` },
+  ];
+
   return (
-    <div className="max-w-container-max mx-auto px-gutter-desktop py-8 space-y-8">
+    <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-8 space-y-8">
       {/* Stats Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
@@ -207,8 +215,9 @@ function Statistics() {
         </Card>
       </div>
 
-      {/* Speed Progression Chart */}
-      <Card>
+      {/* Analytical workspace */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <Card className="lg:col-span-7">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div>
             <h3 className="font-headline text-base font-bold text-slate-900">Typing Speed Over Time</h3>
@@ -265,6 +274,39 @@ function Statistics() {
           ))}
         </div>
       </Card>
+
+      <Card className="lg:col-span-5">
+        <div className="flex items-center justify-between mb-1">
+          <div>
+            <h3 className="font-headline text-base font-bold text-slate-900">Keystroke Stress Matrix</h3>
+            <p className="text-xs text-slate-500">Physical key switch hit-rate &amp; latency transitions.</p>
+          </div>
+          <Badge variant="primary">Bigram Latency</Badge>
+        </div>
+        <div className="grid grid-cols-5 gap-1.5 mt-4">
+          {matrixKeys.map((item) => (
+            <div key={item.key} className={`rounded-xl border p-2 text-center ${item.error ? 'border-rose-500 bg-rose-50 text-rose-700' : 'border-outline-variant bg-surface-container-low'}`}>
+              <span className="block font-mono text-sm">{item.key}</span>
+              <span className={`mt-2 block border-b-4 pb-1 font-mono text-[10px] ${item.error ? 'border-rose-500' : 'border-secondary text-secondary'}`}>{item.value}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 rounded-xl border border-outline-variant bg-surface-container-low p-3 text-xs leading-relaxed text-on-surface-variant">
+          <span className="material-symbols-outlined mr-1 align-middle text-[16px] text-secondary">lightbulb</span>
+          <span className="font-medium text-on-surface">Diagnostic Insight:</span> Right ring finger shows higher latency during double-tap transitions.
+        </div>
+        <div className="mt-8 border-t border-outline-variant pt-4 space-y-3">
+          <div className="flex justify-between text-xs">
+            <span>Speed Efficiency</span><span className="font-mono">{summary.bestWpm} / 100 WPM</span>
+          </div>
+          <div className="h-2 rounded-full bg-slate-100"><div className="h-full rounded-full bg-secondary" style={{ width: `${Math.min(summary.bestWpm, 100)}%` }} /></div>
+          <div className="flex justify-between text-xs">
+            <span>Hit Reliability</span><span className="font-mono">{summary.averageAccuracy}%</span>
+          </div>
+          <div className="h-2 rounded-full bg-slate-100"><div className="h-full rounded-full bg-primary" style={{ width: `${summary.averageAccuracy}%` }} /></div>
+        </div>
+      </Card>
+      </div>
 
       {/* Recent Test History */}
       <Card padding="sm">
@@ -326,6 +368,19 @@ function Statistics() {
             </div>
           ))}
         </div>
+      </Card>
+
+      <Card className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-center text-primary">
+            <span className="material-symbols-outlined text-[18px]">account_tree</span>
+          </div>
+          <div>
+            <h3 className="font-headline text-base font-bold text-slate-900">End-to-End Key Signature Sync</h3>
+            <p className="text-xs text-slate-500">Store raw keystroke telemetry and session benchmarks alongside your history.</p>
+          </div>
+        </div>
+        <Button className="shrink-0">Manage Telemetry Keys</Button>
       </Card>
     </div>
   );

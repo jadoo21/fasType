@@ -4,13 +4,11 @@ import { Link } from 'react-router-dom';
 function Footer() {
   return (
     <footer className="bg-surface-container-lowest border-t border-outline-variant">
-      <div className="container-max px-gutter-desktop py-unit-base flex flex-col md:flex-row justify-between items-center gap-unit-base w-full">
+      <div className="container-max px-gutter-mobile md:px-gutter-desktop py-unit-base flex flex-col md:flex-row justify-between items-center gap-unit-base w-full">
         {/* Brand & Copyright */}
         <div className="flex flex-col sm:flex-row items-center gap-unit-xs text-center sm:text-left">
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center font-mono font-bold shadow-sm transition-transform group-hover:scale-105">
-              <span className="material-symbols-outlined text-[18px]">keyboard</span>
-            </div>
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-on-primary font-label-mono-sm font-bold tracking-tighter">f_</span>
             <span className="font-headline font-bold text-xl tracking-tight text-primary">fasType</span>
           </Link>
           <span className="hidden sm:inline text-outline-variant">•</span>

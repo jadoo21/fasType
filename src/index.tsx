@@ -12,4 +12,4 @@ root.render(
   </Router>
 );
 
-reportWebVitals(console.log);
+reportWebVitals();

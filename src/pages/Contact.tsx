@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Input, Card } from '../components/ui';
-import { contactApi } from '../services/mockApi';
+import { contactApi } from '../services/api';
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -53,7 +53,7 @@ function Contact() {
   };
 
   return (
-    <div className="max-w-container-max mx-auto px-gutter-desktop py-2xl">
+    <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-2xl">
       {/* Page Header */}
       <div className="mb-unit-2xl max-w-3xl">
         <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-surface-container-high border border-outline-variant text-label-mono-sm font-label-mono-sm text-on-primary-fixed-variant mb-unit-sm">

@@ -39,7 +39,7 @@ function About() {
   ];
 
   return (
-    <div className="max-w-container-max mx-auto px-gutter-desktop py-12 space-y-12">
+    <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-12 space-y-12">
       {/* Hero Section */}
       <section className="max-w-3xl">
         <div className="inline-flex items-center gap-unit-sm px-unit-md py-unit-xs bg-surface-container rounded-full border border-outline-variant text-on-surface-variant mb-unit-lg shadow-sm">

@@ -71,8 +71,9 @@ function Signup() {
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-10">
-      <div className="bg-white p-8 rounded-2xl border border-slate-200 card-shadow space-y-5">
+    <div className="w-full max-w-lg mx-auto px-4 py-10 md:py-12 relative">
+      <div className="absolute inset-0 -z-10 pointer-events-none opacity-[0.035] bg-[radial-gradient(#0b1c30_1px,transparent_1px)] [background-size:24px_24px]"></div>
+      <div className="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] space-y-5">
         {/* Card Header */}
         <div className="text-center space-y-1">
           <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center mx-auto mb-2 font-mono font-bold">
@@ -138,6 +139,7 @@ function Signup() {
               />
               <button
                 type="button"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-outline hover:text-on-surface transition-colors"
               >
@@ -183,6 +185,7 @@ function Signup() {
               />
               <button
                 type="button"
+                aria-label={showConfirmPassword ? 'Hide confirmation password' : 'Show confirmation password'}
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-outline hover:text-on-surface transition-colors"
               >

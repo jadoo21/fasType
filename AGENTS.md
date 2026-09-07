@@ -14,13 +14,11 @@ ESLint preset (`react-app` + `react-app/jest`) runs inline during `start`. No se
 
 ## Gotchas
 
-- **`src/api/apiClient.ts:4`** — `baseURL` is a placeholder (`https://your-api-base-url.com`). All API calls fail until replaced with a real backend URL.
-- **`src/components/Header.tsx:17`** — `isLoggedIn` hardcoded to `false`. Header never reads `AuthContext`.
-- **`src/App.test.tsx`** — Stale CRA test (checks for "learn react" link that no longer exists). Will fail as-is.
-- **`src/.env`** — Empty and unused. CRA expects `.env` at project root, not in `src/`.
+- **`.env.example`** — Set `REACT_APP_API_MODE=real` and provide `REACT_APP_API_BASE_URL` when connecting the .NET API.
+- **`src/services/api.ts`** — Components use this mode-selected service facade; mock data is not a production fallback.
 - **`tsconfig.json`** — `strict: true` enabled.
 - **Branch:** `develop` (default).
 
 ## Architecture
 
-`src/index.tsx` → `<BrowserRouter>` → `src/App.tsx` (wraps Header + RouteHandler + Footer). Routes via React Router v6 `useRoutes`: `/login`, `/signup`. Auth via React Context (`src/contexts/AuthContext.tsx`). HTTP via Axios (`src/api/apiClient.ts`). Styling with reactstrap + Bootstrap 5.
+`src/index.tsx` → `<BrowserRouter>` → `src/App.tsx` (wraps Header + RouteHandler + Footer). Routes via React Router v6 `useRoutes`. Auth via React Context (`src/contexts/AuthContext.tsx`). API access goes through `src/services/api.ts`, selecting the typed mock or Axios-backed real adapter. Styling uses Tailwind CSS with Bootstrap loaded for compatibility.

@@ -38,7 +38,7 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary/40 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-lg bg-surface-container-lowest border border-outline rounded-2xl p-xl shadow-2xl transform transition-all duration-200">
+      <div role="dialog" aria-modal="true" aria-labelledby={title ? 'modal-title' : undefined} className="w-full max-w-lg bg-surface-container-lowest border border-outline rounded-2xl p-xl shadow-2xl transform transition-all duration-200">
         {title && (
           <div className="flex items-start justify-between mb-unit-md">
             <div className="flex items-center gap-unit-sm">
@@ -46,7 +46,7 @@ const Modal: React.FC<ModalProps> = ({
                 <span className="material-symbols-outlined text-[24px]">keyboard</span>
               </div>
               <div>
-                <h2 className="text-headline-sm font-headline-sm font-bold text-primary">{title}</h2>
+                <h2 id="modal-title" className="text-headline-sm font-headline-sm font-bold text-primary">{title}</h2>
               </div>
             </div>
             <button

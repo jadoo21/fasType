@@ -13,7 +13,7 @@ const Card: React.FC<CardProps> = ({
   padding = 'md',
   variant = 'default',
 }) => {
-  const baseStyles = 'bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-card';
+  const baseStyles = 'bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-level-1';
 
   const paddings = {
     sm: 'p-4',

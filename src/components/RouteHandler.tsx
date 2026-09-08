@@ -9,15 +9,12 @@ import Contact from '../pages/Contact';
 import { useAuth } from '../contexts/AuthContext';
 
 const RouteHandler = () => {
-  const { isAuthenticated, loading } = useAuth();
+  const { loading } = useAuth();
   const routes = useRoutes([
     { path: "/", element: <Home /> },
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <Signup /> },
-    {
-      path: "/statistics",
-      element: loading ? null : isAuthenticated ? <Statistics /> : <Navigate to="/login" replace />,
-    },
+    { path: "/statistics", element: loading ? null : <Statistics /> },
     { path: "/about", element: <About /> },
     { path: "/contact", element: <Contact /> },
   ]);

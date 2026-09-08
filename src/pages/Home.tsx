@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useTypingTest } from '../contexts/TypingTestContext';
 import { useAuth } from '../contexts/AuthContext';
 import { typingTestApi } from '../services/api';
+import Modal from '../components/ui/Modal';
+import { Button } from '../components/ui';
 
 function Home() {
   const {
@@ -28,6 +30,7 @@ function Home() {
 
   const { user, isAuthenticated } = useAuth();
   const [now, setNow] = useState(() => Date.now());
+  const [isResultDismissed, setIsResultDismissed] = useState(false);
   const submittedTestRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -38,6 +41,7 @@ function Home() {
 
   useEffect(() => {
     if (!isCompleted) submittedTestRef.current = null;
+    if (!isCompleted) setIsResultDismissed(false);
   }, [isCompleted]);
 
   useEffect(() => {
@@ -58,6 +62,7 @@ function Home() {
 
   const timeElapsed = startTime ? Math.floor((now - startTime) / 1000) : 0;
   const timeProgress = (timeElapsed / duration) * 100;
+  const completedSeconds = startTime ? Math.max(1, Math.round(((Date.now()) - startTime) / 1000)) : duration;
 
   return (
     <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-8 space-y-8">
@@ -335,24 +340,33 @@ function Home() {
         </div>
       </section>
 
-      {isCompleted && (
-        <section aria-live="polite" className="max-w-6xl mx-auto w-full">
-          <div className="bg-primary-container text-inverse-on-surface rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div>
-              <p className="font-label-mono-sm text-inverse-primary uppercase tracking-wider">Test complete</p>
-              <h2 className="text-headline-md font-headline-md mt-1">Nice work. Keep the rhythm.</h2>
-              <p className="text-body-sm text-inverse-primary mt-2">
-                {isAuthenticated ? 'Your result was added to your performance history.' : 'Create an account to save your result and track progress.'}
-              </p>
-            </div>
-            <div className="flex items-center gap-5 font-mono text-center">
-              <div><strong className="block text-3xl">{wpm}</strong><span className="text-xs text-inverse-primary">WPM</span></div>
-              <div><strong className="block text-3xl">{accuracy}%</strong><span className="text-xs text-inverse-primary">accuracy</span></div>
-              {!isAuthenticated && <Link to="/signup" className="rounded-xl bg-secondary px-4 py-2 text-sm font-semibold text-white">Save result</Link>}
+      <Modal isOpen={isCompleted && !isResultDismissed} onClose={() => setIsResultDismissed(true)} title="Great Job!" icon="🎉">
+        <p className="-mt-3 mb-5 text-xs text-slate-500">Test session completed with fluid cadence.</p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 my-6">
+          <Score label="Speed" value={<>{wpm} <span className="text-[10px] font-normal">WPM</span></>} />
+          <Score label="Accuracy" value={`${accuracy}%`} tone="text-indigo-600" />
+          <Score label="Errors" value={errors} tone="text-rose-600" />
+          <Score label="Time" value={`${completedSeconds}s`} />
+        </div>
+        <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200 mb-5">
+          <Meter label="Speed Target (Pro Benchmark: 80 WPM)" value={`${Math.min(100, Math.round((wpm / 80) * 100))}%`} percent={Math.min(100, Math.round((wpm / 80) * 100))} />
+          <Meter label="Accuracy & Rhythm Stability" value={`${accuracy}%`} percent={accuracy} indigo />
+        </div>
+        {!isAuthenticated && (
+          <div className="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200 mb-5">
+            <p className="text-xs font-semibold text-slate-900">Want to track your progress?</p>
+            <p className="text-xs text-slate-600 mt-0.5">Create a free account to automatically save your typing history and rhythm charts.</p>
+            <div className="flex items-center gap-2 mt-2.5">
+              <Link to="/signup" onClick={() => setIsResultDismissed(true)} className="px-3 py-1 rounded-lg bg-primary text-white text-xs font-medium">Create Account</Link>
+              <Link to="/login" onClick={() => setIsResultDismissed(true)} className="px-3 py-1 rounded-lg border border-slate-300 text-slate-700 text-xs font-medium">Login</Link>
             </div>
           </div>
-        </section>
-      )}
+        )}
+        <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5">
+          <Link to="/statistics" onClick={() => setIsResultDismissed(true)} className="w-full sm:w-auto px-4 py-2 rounded-xl border border-slate-300 text-center text-xs font-semibold text-slate-700 hover:bg-slate-100">View Statistics</Link>
+          <Button className="w-full sm:w-auto" onClick={resetTest} icon={<span className="material-symbols-outlined text-[16px]">replay</span>}>Try Again</Button>
+        </div>
+      </Modal>
 
       {/* Link to Statistics */}
       <section className="max-w-6xl mx-auto w-full text-center pt-2">
@@ -371,6 +385,14 @@ function Home() {
       </section>
     </div>
   );
+}
+
+function Score({ label, value, tone = 'text-slate-900' }: { label: string; value: React.ReactNode; tone?: string }) {
+  return <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center"><span className="font-mono text-[10px] text-slate-500 uppercase">{label}</span><p className={`font-mono text-xl font-bold mt-0.5 ${tone}`}>{value}</p></div>;
+}
+
+function Meter({ label, value, percent, indigo = false }: { label: string; value: string; percent: number; indigo?: boolean }) {
+  return <div><div className="flex justify-between text-xs font-medium mb-1"><span className="text-slate-600">{label}</span><span className={`font-mono font-bold ${indigo ? 'text-indigo-600' : 'text-slate-900'}`}>{value}</span></div><div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden"><div className={`${indigo ? 'bg-indigo-600' : 'bg-slate-900'} h-full rounded-full`} style={{ width: `${percent}%` }} /></div></div>;
 }
 
 export default Home;

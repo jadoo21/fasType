@@ -9,3 +9,7 @@
   display: flex;
   flex-direction: column;
 }
+
+.status-pulse { animation: statusPulse 1.8s ease-in-out infinite; }
+@keyframes statusPulse { 50% { opacity: .45; transform: scale(.72); } }
+@media (prefers-reduced-motion: reduce) { .status-pulse { animation: none; } }

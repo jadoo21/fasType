@@ -1,5 +1,12 @@
 # Getting Started with Create React App
 
+## Local mock demo
+
+With `REACT_APP_API_MODE=mock` (the default), sign in as `demo` or
+`demo@example.com` using `demo123` to inspect the populated dashboard. This
+account exists only in the in-memory development mock API and is not a
+production credential.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

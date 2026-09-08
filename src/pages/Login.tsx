@@ -32,7 +32,7 @@ function Login() {
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-12">
+    <div className="w-full max-w-lg mx-auto px-4 py-10 md:py-12">
       <div className="bg-white p-8 rounded-2xl border border-slate-200 card-shadow space-y-6">
         {/* Card Header */}
         <div className="text-center space-y-2">

@@ -11,11 +11,11 @@ function App() {
       <TypingTestProvider>
         <div className="App">
           <Header />
-          <div className="App-content">
+          <main className="App-content">
             <RouteHandler />
-          </div>
+          </main>
+          <Footer />
         </div>
-        <Footer />
       </TypingTestProvider>
     </AuthProvider>
   );

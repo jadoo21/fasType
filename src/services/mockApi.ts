@@ -13,24 +13,26 @@ const initMockData = () => {
     mockUsers.set('demo@fastype.dev', {
       id: '1',
       username: 'demo',
-      email: 'demo@fastype.dev',
+      email: 'demo@example.com',
       firstName: 'Demo',
       lastName: 'User',
       createdAt: '2024-01-01T00:00:00Z',
-      bestWpm: 72,
-      averageWpm: 65,
+      bestWpm: 78,
+      averageWpm: 70,
       averageAccuracy: 96,
-      testsCompleted: 28,
-      password: 'password123',
+      testsCompleted: 6,
+      password: 'demo123',
     });
   }
 
   if (mockResults.length === 0) {
     const sampleResults: TypingTestResult[] = [
-      { id: '1', userId: '1', wpm: 68, accuracy: 96, errors: 3, totalCharacters: 280, correctCharacters: 277, duration: 30, mode: '30s / Words', text: 'sample text', createdAt: '2024-10-24T14:32:00Z' },
-      { id: '2', userId: '1', wpm: 72, accuracy: 98, errors: 1, totalCharacters: 300, correctCharacters: 299, duration: 30, mode: '30s / Words', text: 'sample text', createdAt: '2024-10-24T11:15:00Z' },
-      { id: '3', userId: '1', wpm: 64, accuracy: 94, errors: 4, totalCharacters: 260, correctCharacters: 256, duration: 60, mode: '60s / Quotes', text: 'sample text', createdAt: '2024-10-23T19:40:00Z' },
-      { id: '4', userId: '1', wpm: 59, accuracy: 92, errors: 6, totalCharacters: 240, correctCharacters: 234, duration: 60, mode: '60s / Code', text: 'sample text', createdAt: '2024-10-23T16:10:00Z' },
+      { id: '1', userId: '1', wpm: 78, accuracy: 97, errors: 2, totalCharacters: 390, correctCharacters: 388, duration: 30, mode: '30s / Words', text: 'sample text', createdAt: '2026-09-06T14:32:00Z' },
+      { id: '2', userId: '1', wpm: 72, accuracy: 98, errors: 1, totalCharacters: 360, correctCharacters: 359, duration: 30, mode: '30s / Words', text: 'sample text', createdAt: '2026-09-05T11:15:00Z' },
+      { id: '3', userId: '1', wpm: 67, accuracy: 95, errors: 4, totalCharacters: 335, correctCharacters: 331, duration: 60, mode: '60s / Quotes', text: 'sample text', createdAt: '2026-09-03T19:40:00Z' },
+      { id: '4', userId: '1', wpm: 61, accuracy: 93, errors: 6, totalCharacters: 305, correctCharacters: 299, duration: 60, mode: '60s / Code', text: 'sample text', createdAt: '2026-09-01T16:10:00Z' },
+      { id: '5', userId: '1', wpm: 75, accuracy: 96, errors: 3, totalCharacters: 375, correctCharacters: 372, duration: 30, mode: '30s / Words', text: 'sample text', createdAt: '2026-08-30T08:20:00Z' },
+      { id: '6', userId: '1', wpm: 69, accuracy: 94, errors: 5, totalCharacters: 345, correctCharacters: 340, duration: 60, mode: '60s / Quotes', text: 'sample text', createdAt: '2026-08-28T17:10:00Z' },
     ];
     mockResults.push(...sampleResults);
   }
@@ -42,7 +44,7 @@ initMockData();
 export const authApi = {
   login: async ({ email, password }: LoginRequest): Promise<ApiResponse<{ user: User; token: string }>> => {
     await delay(800);
-    const user = mockUsers.get(email);
+    const user = mockUsers.get(email) || Array.from(mockUsers.values()).find(candidate => candidate.username === email);
     if (!user || user.password !== password) {
       return { success: false, error: 'Invalid email or password combination' };
     }
@@ -103,18 +105,10 @@ export const statisticsApi = {
 
   getTrend: async (userId: string, _days: number = 30): Promise<ApiResponse<StatisticsTrend[]>> => {
     await delay(400);
-    // Generate mock trend data
-    const trend: StatisticsTrend[] = [];
-    const baseDate = new Date();
-    for (let i = _days; i >= 0; i--) {
-      const date = new Date(baseDate);
-      date.setDate(date.getDate() - i);
-      trend.push({
-        date: date.toISOString().split('T')[0],
-        wpm: 58 + Math.floor(Math.random() * 15),
-        accuracy: 92 + Math.floor(Math.random() * 6),
-      });
-    }
+    const userResults = mockResults.filter(result => result.userId === userId).slice().sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+    const trend: StatisticsTrend[] = userResults.slice(-Math.max(1, _days)).map(result => ({
+      date: result.createdAt.slice(0, 10), wpm: result.wpm, accuracy: result.accuracy,
+    }));
     return { success: true, data: trend };
   },
 };

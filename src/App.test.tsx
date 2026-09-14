@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
@@ -45,9 +44,8 @@ test('renders populated statistics page with speed chart and performance overvie
       <App />
     </BrowserRouter>
   );
-  expect(await screen.findByRole('heading', { name: /Typing Speed Over Time/i })).toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: /Performance Overview/i })).toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: /Accuracy Over Time/i })).toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: /Typing Speed Progression/i })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /Keystroke Stress Matrix/i })).toBeInTheDocument();
   expect(screen.getByText('Export Telemetry')).toBeInTheDocument();
   localStorage.clear();
 });

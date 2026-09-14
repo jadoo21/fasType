@@ -1,6 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
+import Brand from './Brand';
+import MobileNavigation from './MobileNavigation';
+
+const navLinks = [
+  { path: '/', label: 'Home' },
+  { path: '/statistics', label: 'Statistics' },
+  { path: '/about', label: 'About' },
+  { path: '/contact', label: 'Contact' },
+];
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,28 +18,10 @@ function Header() {
 
   const isActive = (path: string) => location.pathname === path;
 
-  const navLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/statistics', label: 'Statistics' },
-    { path: '/about', label: 'About' },
-    { path: '/contact', label: 'Contact' },
-  ];
-
   return (
     <header className="bg-surface-container-lowest border-b border-outline-variant/80 sticky top-0 z-40">
       <div className="container-max px-gutter-mobile md:px-gutter-desktop h-16 flex items-center justify-between w-full">
-        {/* Brand Logo */}
-        <div className="flex items-center space-x-3">
-          <Link to="/" className="flex items-center gap-2 group text-primary">
-            <div className="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center font-mono font-bold shadow-sm transition-transform group-hover:scale-105">
-              <span className="material-symbols-outlined text-[18px]">keyboard</span>
-            </div>
-            <span className="font-headline font-bold text-xl tracking-tight text-primary">fasType</span>
-          </Link>
-          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono text-[10px] tracking-wide border border-slate-200">
-            v2.4
-          </span>
-        </div>
+        <Brand />
 
         {/* Desktop Primary Links */}
         <nav className="hidden md:flex items-center space-x-8">
@@ -122,58 +113,12 @@ function Header() {
         </div>
       </div>
 
-      {/* Responsive Mobile Drawer */}
-      {isOpen && (
-        <div id="mobile-navigation" className="md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-2 shadow-lg">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              onClick={() => setIsOpen(false)}
-              className={`block w-full text-left px-3 py-2 rounded-lg font-medium text-sm transition-colors ${
-                isActive(link.path)
-                  ? 'bg-slate-100 text-slate-900'
-                  : 'text-slate-800 hover:bg-slate-100'
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <div className="border-t border-slate-200 pt-2 flex items-center justify-between">
-            <span className="text-xs text-slate-500 font-mono">v2.4</span>
-            <div className="flex items-center gap-2">
-              {user ? (
-                <button
-                  onClick={() => {
-                    void logout();
-                    setIsOpen(false);
-                  }}
-                  className="text-xs font-semibold px-2.5 py-1 rounded bg-rose-50 text-rose-700"
-                >
-                  Logout
-                </button>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    onClick={() => setIsOpen(false)}
-                    className="text-xs font-semibold px-2.5 py-1 rounded bg-slate-100"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/signup"
-                    onClick={() => setIsOpen(false)}
-                    className="text-xs font-semibold px-2.5 py-1 rounded bg-slate-900 text-white"
-                  >
-                    Sign Up
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <MobileNavigation
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        navLinks={navLinks}
+        isActive={isActive}
+      />
     </header>
   );
 }

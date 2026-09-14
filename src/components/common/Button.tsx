@@ -1,10 +1,12 @@
 import React from 'react';
+import { Button as ReactstrapButton } from 'reactstrap';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   icon?: React.ReactNode;
+  tag?: React.ElementType;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -15,6 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   children,
   className = '',
   disabled,
+  tag,
   ...props
 }) => {
   const baseStyles = 'inline-flex items-center justify-center gap-2 font-body text-body-sm font-medium rounded-xl transition-all duration-150 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed';
@@ -33,10 +36,13 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   return (
-    <button
+    <ReactstrapButton
+      type={props.type ?? 'button'}
+      color="link"
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={disabled || loading}
-      {...props}
+      tag={tag}
+      {...(props as any)}
     >
       {loading ? (
         <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
@@ -47,7 +53,7 @@ const Button: React.FC<ButtonProps> = ({
         <span className="text-[18px]">{icon}</span>
       ) : null}
       {children}
-    </button>
+    </ReactstrapButton>
   );
 };
 

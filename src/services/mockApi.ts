@@ -135,7 +135,7 @@ export const typingTestApi = {
 
 // Contact API
 export const contactApi = {
-  submit: async (data: ContactRequest): Promise<ApiResponse<null>> => {
+  submit: async (_data: ContactRequest): Promise<ApiResponse<null>> => {
     await delay(1000);
     // Simulate occasional failure
     if (Math.random() < 0.1) {

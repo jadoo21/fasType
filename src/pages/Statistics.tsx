@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { statisticsApi } from '../services/api';
 import { StatisticsSummary, StatisticsTrend } from '../types';
-import { Button } from '../components/ui';
+import { Button } from '../components/common';
 
 function Statistics() {
   const { user, isAuthenticated } = useAuth();
@@ -583,7 +583,7 @@ function Statistics() {
                     )}
                   </td>
                   <td className="py-3.5 px-unit-lg text-right">
-                    <button className="inline-flex items-center gap-1 text-label-mono-sm font-label-mono-sm text-secondary hover:text-primary font-medium hover:underline">
+                    <button type="button" className="inline-flex items-center gap-1 text-label-mono-sm font-label-mono-sm text-secondary hover:text-primary font-medium hover:underline">
                       <span>Inspect Packet</span>
                       <span className="material-symbols-outlined text-[14px]">chevron_right</span>
                     </button>

@@ -3,8 +3,9 @@ import React from 'react';
 interface CardProps {
   children: React.ReactNode;
   className?: string;
-  padding?: 'sm' | 'md' | 'lg';
+  padding?: 'sm' | 'md' | 'lg' | 'none';
   variant?: 'default' | 'interactive';
+  tag?: React.ElementType;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -12,10 +13,12 @@ const Card: React.FC<CardProps> = ({
   className = '',
   padding = 'md',
   variant = 'default',
+  tag: Tag = 'div',
 }) => {
   const baseStyles = 'bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-level-1';
 
   const paddings = {
+    none: '',
     sm: 'p-4',
     md: 'p-6',
     lg: 'p-8',
@@ -27,9 +30,9 @@ const Card: React.FC<CardProps> = ({
   };
 
   return (
-    <div className={`${baseStyles} ${paddings[padding]} ${variants[variant]} ${className}`}>
+    <Tag className={`${baseStyles} ${paddings[padding]} ${variants[variant]} ${className}`}>
       {children}
-    </div>
+    </Tag>
   );
 };
 

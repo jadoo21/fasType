@@ -5,6 +5,9 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   hint?: string;
   icon?: React.ReactNode;
+  as?: 'input' | 'textarea';
+  rows?: number;
+  maxLength?: number;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -14,9 +17,47 @@ const Input: React.FC<InputProps> = ({
   icon,
   className = '',
   id,
+  as = 'input',
+  rows,
+  maxLength,
   ...props
 }) => {
   const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
+
+  if (as === 'textarea') {
+    return (
+      <div className="space-y-1.5">
+        {label && (
+          <label
+            htmlFor={inputId}
+            className="block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase"
+          >
+            {label}
+          </label>
+        )}
+        <textarea
+          id={inputId}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
+          className={`w-full px-3.5 py-2.5 bg-surface-container-lowest border rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all resize-y ${
+            error ? 'border-error' : 'border-outline-variant'
+          } ${className}`}
+          rows={rows}
+          maxLength={maxLength}
+          {...(props as any)}
+        />
+        {error && (
+          <p id={`${inputId}-error`} role="alert" className="text-xs text-error flex items-center gap-1">
+            <span className="material-symbols-outlined text-[14px]">error</span>
+            {error}
+          </p>
+        )}
+        {hint && !error && (
+          <p id={`${inputId}-hint`} className="text-xs text-on-surface-variant">{hint}</p>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-1.5">
@@ -39,9 +80,7 @@ const Input: React.FC<InputProps> = ({
           aria-invalid={Boolean(error)}
           aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
           className={`w-full px-3.5 py-2.5 bg-surface-container-lowest border rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all ${
-            error
-              ? 'border-error'
-              : 'border-outline-variant'
+            error ? 'border-error' : 'border-outline-variant'
           } ${icon ? 'pl-10' : ''} ${className}`}
           {...props}
         />

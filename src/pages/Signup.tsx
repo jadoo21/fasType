@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Button, Input } from '../components/ui';
+import { Button } from '../components/common';
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -93,42 +93,59 @@ function Signup() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-3.5">
-          <Input
-            label="USERNAME"
-            type="text"
-            name="username"
-            placeholder="alex_typist"
-            value={formData.username}
-            onChange={handleChange}
-            required
-            hint={formData.username ? '✓ Username available' : undefined}
-          />
+          <div className="space-y-1.5">
+            <label htmlFor="signup-username" className="block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">USERNAME</label>
+            <input
+              id="signup-username"
+              type="text"
+              name="username"
+              placeholder="alex_typist"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              className="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
+            />
+            {formData.username && (
+              <p className="text-xs text-on-surface-variant">&#10003; Username available</p>
+            )}
+          </div>
 
-          <Input
-            label="EMAIL"
-            type="email"
-            name="email"
-            placeholder="alex@example.com"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            hint={formData.email ? '✓ Valid email address' : undefined}
-          />
+          <div className="space-y-1.5">
+            <label htmlFor="signup-email" className="block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">EMAIL</label>
+            <input
+              id="signup-email"
+              type="email"
+              name="email"
+              placeholder="alex@example.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
+            />
+            {formData.email && (
+              <p className="text-xs text-on-surface-variant">&#10003; Valid email address</p>
+            )}
+          </div>
 
-          <Input
-            label="PHONE (OPTIONAL)"
-            type="tel"
-            name="phone"
-            placeholder="+1 (555) 019-2834"
-            value={formData.phone}
-            onChange={handleChange}
-          />
+          <div className="space-y-1.5">
+            <label htmlFor="signup-phone" className="block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">PHONE (OPTIONAL)</label>
+            <input
+              id="signup-phone"
+              type="tel"
+              name="phone"
+              placeholder="+1 (555) 019-2834"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
+            />
+          </div>
 
           {/* Password */}
           <div className="space-y-1.5">
-            <label className="block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">PASSWORD</label>
+            <label htmlFor="signup-password" className="block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">PASSWORD</label>
             <div className="relative">
               <input
+                id="signup-password"
                 type={showPassword ? 'text' : 'password'}
                 name="password"
                 className="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all pr-10"
@@ -168,9 +185,10 @@ function Signup() {
 
           {/* Confirm Password */}
           <div className="space-y-1.5">
-            <label className="block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">CONFIRM PASSWORD</label>
+            <label htmlFor="signup-confirm-password" className="block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">CONFIRM PASSWORD</label>
             <div className="relative">
               <input
+                id="signup-confirm-password"
                 type={showConfirmPassword ? 'text' : 'password'}
                 name="confirmPassword"
                 className={`w-full px-3.5 py-2.5 bg-surface-container-lowest border rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 transition-all pr-10 ${

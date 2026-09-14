@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTypingTest } from '../contexts/TypingTestContext';
 import { useAuth } from '../contexts/AuthContext';
 import { typingTestApi } from '../services/api';
-import Modal from '../components/ui/Modal';
-import { Button } from '../components/ui';
+import { AppModal, Button } from '../components/common';
 
 function Home() {
   const {
@@ -121,6 +120,7 @@ function Home() {
             {[15, 30, 60].map((d) => (
               <button
                 key={d}
+                type="button"
                 onClick={() => setDuration(d)}
                 className={`px-3 py-1 rounded-lg text-xs font-mono font-medium transition-all ${
                   duration === d
@@ -144,6 +144,7 @@ function Home() {
             {(['easy', 'medium', 'hard'] as const).map((d) => (
               <button
                 key={d}
+                type="button"
                 onClick={() => setDifficulty(d)}
                 className={`px-3 py-1 rounded-lg text-xs font-medium transition-all capitalize ${
                   difficulty === d
@@ -164,6 +165,7 @@ function Home() {
             {(['words', 'quotes', 'code'] as const).map((m) => (
               <button
                 key={m}
+                type="button"
                 onClick={() => setMode(m)}
                 className={`px-3 py-1 rounded-lg text-xs font-medium transition-all capitalize ${
                   mode === m
@@ -200,6 +202,7 @@ function Home() {
                 <span>to restart</span>
               </div>
               <button
+                type="button"
                 onClick={resetTest}
                 aria-label="Restart test"
                 className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all active:rotate-180"
@@ -330,6 +333,7 @@ function Home() {
             <div className="mt-3 flex items-center justify-center gap-4 text-center">
               {!isStarted && (
                 <button
+                  type="button"
                   onClick={startTest}
                   className="text-xs font-mono text-indigo-600 hover:text-indigo-800 flex items-center gap-1"
                 >
@@ -341,7 +345,7 @@ function Home() {
         </div>
       </section>
 
-      <Modal isOpen={isCompleted && !isResultDismissed} onClose={() => setIsResultDismissed(true)} title="Great Job!" icon="🎉">
+      <AppModal isOpen={isCompleted && !isResultDismissed} onClose={() => setIsResultDismissed(true)} title="Great Job!" icon="🎉">
         <p className="-mt-3 mb-5 text-xs text-slate-500">Test session completed with fluid cadence.</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 my-6">
           <Score label="Speed" value={<>{wpm} <span className="text-[10px] font-normal">WPM</span></>} />
@@ -367,7 +371,7 @@ function Home() {
           <Link to="/statistics" onClick={() => setIsResultDismissed(true)} className="w-full sm:w-auto px-4 py-2 rounded-xl border border-slate-300 text-center text-xs font-semibold text-slate-700 hover:bg-slate-100">View Statistics</Link>
           <Button className="w-full sm:w-auto" onClick={resetTest} icon={<span className="material-symbols-outlined text-[16px]">replay</span>}>Try Again</Button>
         </div>
-      </Modal>
+      </AppModal>
 
       {/* Link to Statistics */}
       <section className="max-w-7xl mx-auto w-full text-center pt-2">

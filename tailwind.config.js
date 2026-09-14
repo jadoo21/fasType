@@ -142,7 +142,7 @@ module.exports = {
         "unit-3xl": "4rem",
         "gutter-mobile": "1rem",
         "gutter-desktop": "2rem",
-        "container-max": "72rem",
+        "container-max": "80rem",
       },
       boxShadow: {
         "level-0": "none",

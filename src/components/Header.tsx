@@ -17,29 +17,31 @@ function Header() {
   ];
 
   return (
-    <header className="bg-surface-container-lowest border-b border-outline-variant/80 sticky top-0 z-40 shadow-sm">
+    <header className="bg-surface-container-lowest border-b border-outline-variant/80 sticky top-0 z-40">
       <div className="container-max px-gutter-mobile md:px-gutter-desktop h-16 flex items-center justify-between w-full">
         {/* Brand Logo */}
         <div className="flex items-center space-x-3">
           <Link to="/" className="flex items-center gap-2 group text-primary">
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-on-primary font-label-mono-sm font-bold tracking-tighter transition-transform group-hover:scale-95">f_</span>
-            <span className="font-headline font-bold text-2xl tracking-tight">fasType</span>
+            <div className="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center font-mono font-bold shadow-sm transition-transform group-hover:scale-105">
+              <span className="material-symbols-outlined text-[18px]">keyboard</span>
+            </div>
+            <span className="font-headline font-bold text-xl tracking-tight text-primary">fasType</span>
           </Link>
-          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded bg-surface-container-low text-on-surface-variant font-label-mono-sm border border-outline-variant">
-            v2.4.0
+          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono text-[10px] tracking-wide border border-slate-200">
+            v2.4
           </span>
         </div>
 
         {/* Desktop Primary Links */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
               className={`font-body text-sm transition-all ${
                 isActive(link.path)
-                  ? 'font-medium text-primary border-b-2 border-primary pb-1'
-                  : 'text-on-surface-variant hover:text-primary'
+                  ? 'font-semibold text-primary border-b-2 border-slate-900 pb-1'
+                  : 'text-slate-600 hover:text-primary'
               }`}
             >
               {link.label}
@@ -89,23 +91,15 @@ function Header() {
             <>
               {/* Anonymous State */}
               <div className="hidden md:flex items-center gap-2">
-                <div className="hidden lg:flex items-center gap-1 border-r border-outline-variant pr-3 mr-1">
-                  <button aria-label="Keyboard shortcuts" className="p-1.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-low">
-                    <span className="material-symbols-outlined text-[20px]">keyboard</span>
-                  </button>
-                  <button aria-label="Color theme" className="p-1.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-low">
-                    <span className="material-symbols-outlined text-[20px]">palette</span>
-                  </button>
-                </div>
                 <Link
                   to="/login"
-                  className="px-3 py-1.5 rounded-xl text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
+                  className="px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-700 hover:text-primary transition-colors"
                 >
                   Login
                 </Link>
                 <Link
                   to="/signup"
-                  className="px-3.5 py-1.5 rounded-xl text-sm font-medium bg-primary text-white hover:bg-on-surface-variant transition-all subtle-shadow"
+                  className="px-4 py-1.5 rounded-lg text-sm font-medium bg-primary text-white hover:bg-slate-800 transition-all subtle-shadow"
                 >
                   Sign Up
                 </Link>

@@ -41,22 +41,22 @@ function About() {
   return (
     <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-12 space-y-12">
       {/* Hero Section */}
-      <section className="max-w-3xl">
+      <section className="max-w-4xl mx-auto text-center">
         <div className="inline-flex items-center gap-unit-sm px-unit-md py-unit-xs bg-surface-container rounded-full border border-outline-variant text-on-surface-variant mb-unit-lg shadow-sm">
           <span className="inline-block w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
           <span className="font-label-mono-sm text-label-mono-sm text-on-surface font-semibold tracking-wider uppercase">• Engineered for Flow • Zero Latency</span>
         </div>
 
-        <h1 className="text-display-hero font-display-hero tracking-tight text-primary mb-unit-lg">
+        <h1 className="text-display-hero font-display-hero tracking-tight text-primary mb-unit-lg leading-tight">
           Typing faster is only part of the journey. <br className="hidden sm:inline" />
           <span className="text-on-surface-variant font-medium">Improving consistently is what matters.</span>
         </h1>
 
-        <p className="text-body-lg font-body-lg text-on-surface-variant max-w-2xl leading-relaxed mb-unit-xl">
+        <p className="text-body-lg font-body-lg text-on-surface-variant max-w-2xl leading-relaxed mb-unit-xl mx-auto">
           fasType is a modern typing practice and performance platform designed to help developers, writers, and competitive typists unlock fluid cognitive throughput through focused practice and meaningful feedback.
         </p>
 
-        <div className="flex flex-wrap items-center gap-unit-base">
+        <div className="flex flex-wrap items-center gap-unit-base justify-center">
           <Link to="/">
             <Button icon={<span className="material-symbols-outlined text-[18px]">arrow_forward</span>}>
               Start a Typing Test

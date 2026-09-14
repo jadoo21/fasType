@@ -26,7 +26,7 @@ test('renders statistics page empty state with header and track your progress ca
   expect(screen.getByText(/PERFORMANCE ANALYTICS/i)).toBeInTheDocument();
 });
 
-test('renders populated statistics page with stitch-design graph and keystroke stress matrix', async () => {
+test('renders populated statistics page with speed chart and performance overview', async () => {
   localStorage.setItem('fastype_user', JSON.stringify({
     id: '1',
     username: 'demo',
@@ -45,12 +45,9 @@ test('renders populated statistics page with stitch-design graph and keystroke s
       <App />
     </BrowserRouter>
   );
-  expect(await screen.findByRole('heading', { name: /Typing Speed Progression/i })).toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: /Keystroke Stress Matrix/i })).toBeInTheDocument();
-  expect(screen.getByText('Cadence Target Index')).toBeInTheDocument();
-  expect(screen.getByText('Diagnostic Insight:')).toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: /Typing Speed Over Time/i })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /Performance Overview/i })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /Accuracy Over Time/i })).toBeInTheDocument();
   expect(screen.getByText('Export Telemetry')).toBeInTheDocument();
   localStorage.clear();
 });
-
-

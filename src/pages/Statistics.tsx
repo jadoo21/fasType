@@ -89,15 +89,13 @@ function Statistics() {
     return (
       <div className="w-full max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-8 space-y-8">
         {/* Stats Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-5">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono text-indigo-600 mb-1">
-              <span className="material-symbols-outlined text-[16px]">analytics</span>
-              <span>PERFORMANCE ANALYTICS</span>
-            </div>
-            <h1 className="text-3xl font-headline font-bold text-slate-900">Your Typing Progress</h1>
-            <p className="text-sm text-slate-600 mt-0.5">Track your speed, accuracy, and cadence consistency over time.</p>
+        <div className="flex flex-col items-center text-center max-w-xl mx-auto border-b border-slate-200 pb-5">
+          <div className="inline-flex items-center gap-unit-sm px-unit-md py-unit-xs bg-surface-container rounded-full border border-outline-variant text-on-surface-variant mb-unit-lg shadow-sm">
+            <span className="inline-block w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            <span className="font-label-mono-sm text-label-mono-sm text-on-surface font-semibold tracking-wider uppercase">Performance Analytics</span>
           </div>
+          <h1 className="text-3xl font-headline font-bold text-slate-900">Your Typing Progress</h1>
+          <p className="text-sm text-slate-600 mt-0.5">Track your speed, accuracy, and cadence consistency over time.</p>
         </div>
 
         <div className="w-full bg-white p-8 sm:p-12 rounded-2xl border border-slate-200 text-center space-y-4 card-shadow">
@@ -210,20 +208,18 @@ function Statistics() {
   return (
     <div className="w-full max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-unit-xl space-y-unit-xl">
       {/* Header Section with Breadcrumbs, Title & Timeframe Selector */}
-      <section className="flex flex-col md:flex-row md:items-end justify-between gap-unit-lg pb-unit-md border-b border-outline-variant">
-        <div>
-          <div className="flex items-center gap-unit-xs text-label-mono-sm font-label-mono-sm text-on-surface-variant uppercase tracking-wider mb-unit-xs">
-            <span className="material-symbols-outlined text-[16px] text-secondary">analytics</span>
-            <span>PERFORMANCE ANALYTICS</span>
-            <span className="text-outline-variant">/</span>
-            <span className="text-secondary font-medium">Driver Session Analytics</span>
+      <section className="flex flex-col items-center justify-center text-center gap-unit-lg pb-unit-md border-b border-outline-variant">
+        <div className="flex flex-col items-center text-center max-w-xl mx-auto">
+          <div className="inline-flex items-center gap-unit-sm px-unit-md py-unit-xs bg-surface-container rounded-full border border-outline-variant text-on-surface-variant mb-unit-lg shadow-sm">
+            <span className="inline-block w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            <span className="font-label-mono-sm text-label-mono-sm text-on-surface font-semibold tracking-wider uppercase">Performance Analytics</span>
           </div>
           <h1 className="text-headline-lg font-headline-lg text-on-surface tracking-tight">Your Typing Progress</h1>
           <p className="text-body-md font-body-md text-on-surface-variant mt-1">Track your speed, accuracy, and keystroke consistency over time.</p>
         </div>
 
         {/* Timeframe selector & Actions */}
-        <div className="flex flex-wrap items-center gap-unit-sm">
+        <div className="flex flex-wrap items-center justify-center gap-unit-sm">
           <div className="inline-flex p-1 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-sm font-body-sm">
             {(['7d', '30d', '3m', 'all'] as const).map((tf) => (
               <button

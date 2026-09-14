@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
-import { Button, Input, Card } from '../components/ui';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import { contactApi } from '../services/api';
 
 function Contact() {
+  const { user } = useAuth();
+
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+    name: user?.firstName || user?.username || 'Alex Vance',
+    email: user?.email || 'alex@domain.com',
     subject: 'feature',
     message: '',
     includeDiagnostics: true,
   });
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const isValidEmail = Boolean(
+    formData.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+  );
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -26,8 +35,8 @@ function Contact() {
     setFormData(prev => ({ ...prev, subject }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const submitForm = useCallback(async () => {
+    if (loading) return;
     setLoading(true);
     setError(null);
 
@@ -41,7 +50,7 @@ function Contact() {
 
       if (result.success) {
         setSuccess(true);
-        setFormData({ name: '', email: '', subject: 'feature', message: '', includeDiagnostics: true });
+        window.scrollTo({ top: 200, behavior: 'smooth' });
       } else {
         setError(result.error || 'Failed to send message');
       }
@@ -50,12 +59,52 @@ function Contact() {
     } finally {
       setLoading(false);
     }
+  }, [formData, loading]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    void submitForm();
   };
 
+  // Keyboard trigger: Cmd/Ctrl + Enter to submit form
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        const form = document.getElementById('contactForm') as HTMLFormElement | null;
+        if (form) {
+          if (form.checkValidity()) {
+            e.preventDefault();
+            void submitForm();
+          } else {
+            form.reportValidity();
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [submitForm]);
+
+  // Environment info string for System Diagnostics
+  const envInfo = React.useMemo(() => {
+    const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+    let browser = 'Chrome 124';
+    if (ua.includes('Firefox')) browser = 'Firefox';
+    else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
+    else if (ua.includes('Edg')) browser = 'Edge';
+
+    let os = 'macOS 14.4';
+    if (ua.includes('Win')) os = 'Windows 11';
+    else if (ua.includes('Linux')) os = 'Linux';
+
+    return `${browser}, ${os}`;
+  }, []);
+
   return (
-    <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-2xl">
+    <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-unit-2xl">
       {/* Page Header */}
-      <div className="mb-unit-2xl max-w-3xl">
+      <div className="mb-unit-2xl max-w-3xl mx-auto text-center flex flex-col items-center">
         <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-surface-container-high border border-outline-variant text-label-mono-sm font-label-mono-sm text-on-primary-fixed-variant mb-unit-sm">
           <span className="inline-block w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
           PRECISION FEEDBACK DISPATCH // DEV.V3.4
@@ -66,12 +115,12 @@ function Contact() {
         </p>
       </div>
 
-      {/* Two-Column Layout */}
+      {/* Two-Column Layout Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-unit-xl items-start">
         {/* Left Column: Information & Context */}
         <div className="lg:col-span-5 space-y-unit-lg">
-          {/* Context Card */}
-          <Card>
+          {/* Direct Feedback Channel Context Card */}
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-unit-lg shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between mb-unit-sm">
               <span className="text-label-mono-sm font-label-mono-sm text-on-surface-variant">TELEMETRY & UX ITERATION</span>
               <span className="text-label-mono-sm font-label-mono-sm text-secondary bg-surface-container px-2 py-0.5 rounded">DIRECT CHANNEL</span>
@@ -80,7 +129,7 @@ function Contact() {
             <p className="text-body-md font-body-md text-on-surface-variant leading-relaxed">
               fasType is continuously refined through real-world keystroke telemetry, tactile community reviews, and open feedback loops. Every issue logged directly informs our next release cycle.
             </p>
-          </Card>
+          </div>
 
           {/* Quick Category Cards */}
           <div className="space-y-3">
@@ -121,7 +170,7 @@ function Contact() {
             </div>
           </div>
 
-          {/* Response SLA */}
+          {/* Response SLA Badge */}
           <div className="flex items-center gap-3 p-unit-base bg-surface-container-low border border-outline-variant rounded-xl">
             <div className="w-3 h-3 rounded-full bg-secondary flex items-center justify-center">
               <span className="w-1.5 h-1.5 rounded-full bg-on-secondary"></span>
@@ -131,7 +180,7 @@ function Contact() {
             </div>
           </div>
 
-          {/* Direct Links */}
+          {/* Direct Links / Endpoints */}
           <div className="border-t border-outline-variant pt-unit-base">
             <h4 className="text-label-mono-sm font-label-mono-sm text-on-surface-variant mb-unit-sm">PUBLIC REPOSITORIES & HUBS</h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -151,12 +200,12 @@ function Contact() {
           </div>
         </div>
 
-        {/* Right Column: Contact Form */}
+        {/* Right Column: Interactive Contact Form */}
         <div className="lg:col-span-7">
-          <Card padding="lg">
-            {/* Success Banner */}
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-unit-xl shadow-sm">
+            {/* Success Confirmation Banner */}
             {success && (
-              <div className="mb-unit-lg p-unit-base bg-surface-container border border-secondary rounded-xl text-on-surface transition-all duration-200">
+              <div className="mb-unit-lg p-unit-base bg-surface-container border border-secondary rounded-xl text-on-surface transition-all duration-200" id="confirmationBanner">
                 <div className="flex items-start gap-3">
                   <span className="material-symbols-outlined text-secondary">check_circle</span>
                   <div>
@@ -169,43 +218,58 @@ function Contact() {
 
             {/* Error Alert */}
             {error && (
-              <div className="mb-unit-lg p-unit-base bg-rose-50 border border-rose-200 rounded-xl text-rose-700 flex items-start gap-3">
-                <span className="material-symbols-outlined text-rose-600">error</span>
+              <div className="mb-unit-lg p-unit-base bg-error-container border border-error/30 rounded-xl text-on-error-container flex items-start gap-3">
+                <span className="material-symbols-outlined text-error">error</span>
                 <div>
-                  <div className="font-semibold text-body-md">Failed to send message</div>
-                  <p className="text-body-sm text-rose-600 mt-0.5">{error}</p>
+                  <div className="font-semibold text-body-md font-body-md text-error font-medium">Failed to send message</div>
+                  <p className="text-body-sm font-body-sm text-on-error-container mt-0.5">{error}</p>
                 </div>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-unit-lg">
-              {/* Name & Email */}
+            <form id="contactForm" onSubmit={handleSubmit} className="space-y-unit-lg">
+              {/* Name & Email Inputs */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-unit-base">
-                <Input
-                  label="NAME *"
-                  type="text"
-                  name="name"
-                  placeholder="Alex Vance"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-                <Input
-                  label="EMAIL *"
-                  type="email"
-                  name="email"
-                  placeholder="alex@domain.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  hint={formData.email ? '✓ Validated' : undefined}
-                />
+                <div className="space-y-1.5">
+                  <label className="block text-label-mono-sm font-label-mono-sm text-on-surface-variant" htmlFor="contact-name">NAME *</label>
+                  <input
+                    id="contact-name"
+                    name="name"
+                    type="text"
+                    required
+                    placeholder="Alex Vance"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-md font-body-md text-on-surface focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-label-mono-sm font-label-mono-sm text-on-surface-variant" htmlFor="contact-email">EMAIL *</label>
+                    {isValidEmail && (
+                      <span className="text-label-mono-sm font-label-mono-sm text-secondary flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[14px]">verified</span> Validated
+                      </span>
+                    )}
+                  </div>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="alex@domain.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-md font-body-md text-on-surface focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all"
+                  />
+                </div>
               </div>
 
               {/* Subject Selection Pills */}
               <div className="space-y-2">
                 <label className="block text-label-mono-sm font-label-mono-sm text-on-surface-variant">SUBJECT INQUIRY *</label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2" id="subject-pill-group">
                   {[
                     { value: 'feature', label: 'Feature Suggestion' },
                     { value: 'bug', label: 'Bug Report' },
@@ -216,9 +280,9 @@ function Contact() {
                       key={option.value}
                       type="button"
                       onClick={() => handleSubjectChange(option.value)}
-                      className={`px-3 py-1.5 rounded-xl border text-body-sm font-body-sm font-medium transition-all ${
+                      className={`subject-pill px-3 py-1.5 rounded-xl border text-body-sm font-body-sm transition-all ${
                         formData.subject === option.value
-                          ? 'border-primary bg-primary text-on-primary'
+                          ? 'border-primary bg-primary text-on-primary font-medium'
                           : 'border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:border-outline'
                       }`}
                     >
@@ -228,26 +292,28 @@ function Contact() {
                 </div>
               </div>
 
-              {/* Message Textarea */}
+              {/* Message Textarea with Live Counter */}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
                   <label className="block text-label-mono-sm font-label-mono-sm text-on-surface-variant" htmlFor="contact-message">MESSAGE DETAILS *</label>
-                  <span className="text-label-mono-sm font-label-mono-sm text-on-surface-variant">{formData.message.length} / 1000 characters</span>
+                  <span className="text-label-mono-sm font-label-mono-sm text-on-surface-variant" id="charCounter">
+                    {formData.message.length} / 1000 characters
+                  </span>
                 </div>
                 <textarea
                   id="contact-message"
                   name="message"
                   maxLength={1000}
                   rows={5}
+                  required
                   placeholder="Describe your telemetry anomaly, feature thoughts, or hardware setup details (switch type, polling rate, OS)..."
-                  className="w-full p-3.5 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-md font-body-md text-on-surface focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all resize-y"
                   value={formData.message}
                   onChange={handleChange}
-                  required
+                  className="w-full p-3.5 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-md font-body-md text-on-surface focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all resize-y"
                 ></textarea>
               </div>
 
-              {/* System Diagnostics Toggle */}
+              {/* System Diagnostics Environment Toggle */}
               <div className="p-unit-base rounded-xl border border-outline-variant bg-surface-container-low flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -255,22 +321,22 @@ function Contact() {
                     <span className="text-body-md font-body-md font-semibold text-primary">System Diagnostics</span>
                   </div>
                   <p className="text-body-sm font-body-sm text-on-surface-variant">
-                    Include browser environment data (<code className="font-label-mono-sm text-label-mono-sm text-primary">Chrome 124, macOS 14.4</code>) to help debug frame-drops and input latency.
+                    Include browser environment data (<code className="font-label-mono-sm text-label-mono-sm text-primary">{envInfo}</code>) to help debug frame-drops and input latency.
                   </p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
                   <input
                     type="checkbox"
-                    className="sr-only peer"
+                    name="includeDiagnostics"
                     checked={formData.includeDiagnostics}
                     onChange={handleChange}
-                    name="includeDiagnostics"
+                    className="sr-only peer"
                   />
                   <div className="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-outline-variant after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
 
-              {/* Action Buttons */}
+              {/* Action Buttons & Keyboard Trigger Notice */}
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-2 text-label-mono-sm font-label-mono-sm text-on-surface-variant order-2 sm:order-1">
                   <span>PRESS</span>
@@ -279,13 +345,26 @@ function Contact() {
                   <kbd className="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary shadow-xs">Enter</kbd>
                   <span>TO TRANSMIT</span>
                 </div>
-                <Button type="submit" loading={loading} className="w-full sm:w-auto order-1 sm:order-2">
-                  <span>Send Message</span>
-                  <span className="material-symbols-outlined text-[18px]">send</span>
-                </Button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary text-on-primary font-medium px-6 py-3 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all duration-100 ease-out order-1 sm:order-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? (
+                    <svg className="animate-spin h-4 w-4 text-on-primary" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  ) : (
+                    <>
+                      <span>Send Message</span>
+                      <span className="material-symbols-outlined text-[18px]">send</span>
+                    </>
+                  )}
+                </button>
               </div>
             </form>
-          </Card>
+          </div>
         </div>
       </div>
     </div>

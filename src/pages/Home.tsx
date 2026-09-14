@@ -61,6 +61,7 @@ function Home() {
   }, [accuracy, duration, errors, isAuthenticated, isCompleted, mode, text, typedText.length, user, wpm]);
 
   const timeElapsed = startTime ? Math.floor((now - startTime) / 1000) : 0;
+  const timeRemaining = Math.max(0, duration - timeElapsed);
   const timeProgress = (timeElapsed / duration) * 100;
   const completedSeconds = startTime ? Math.max(1, Math.round(((Date.now()) - startTime) / 1000)) : duration;
 
@@ -178,7 +179,7 @@ function Home() {
       </section>
 
       {/* Typing Test Card */}
-      <section className="max-w-6xl mx-auto w-full">
+      <section className="max-w-7xl mx-auto w-full">
         <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden relative">
           {/* Card Header Bar */}
           <div className="px-6 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50/60">
@@ -216,7 +217,7 @@ function Home() {
               <span className="font-mono text-xs text-slate-500 font-medium tracking-wider">TIME</span>
               <div className="flex items-baseline gap-1 mt-1">
                 <span className="font-mono text-3xl sm:text-4xl font-bold text-slate-900">
-                  {duration - timeElapsed}
+                  {timeRemaining}
                   <span className="text-sm font-normal text-slate-500">s</span>
                 </span>
               </div>
@@ -369,7 +370,7 @@ function Home() {
       </Modal>
 
       {/* Link to Statistics */}
-      <section className="max-w-6xl mx-auto w-full text-center pt-2">
+      <section className="max-w-7xl mx-auto w-full text-center pt-2">
         <div className="p-4 rounded-xl bg-slate-100 border border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
           <div>
             <h4 className="font-headline font-semibold text-sm text-slate-900">Looking for deep trends and analytics?</h4>

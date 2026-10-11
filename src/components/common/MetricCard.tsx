@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '../../utils/cn';
 
 interface MetricCardProps {
   label: string;
@@ -18,17 +19,17 @@ const MetricCard: React.FC<MetricCardProps> = ({
   unit,
   icon,
   iconClassName = 'bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed',
-  className = '',
+  className,
   footer,
   decorative,
   children,
 }) => {
   return (
-    <div className={`bg-surface-container-lowest p-unit-lg rounded-2xl border border-outline-variant shadow-sm hover:border-outline transition-all flex flex-col justify-between relative overflow-hidden group ${className}`}>
+    <div className={cn('bg-surface-container-lowest p-unit-lg rounded-2xl border border-outline-variant shadow-sm hover:border-outline transition-all flex flex-col justify-between relative overflow-hidden group', className)}>
       {decorative && <div className="absolute top-0 right-0 w-24 h-24 bg-surface-container-low rounded-bl-full pointer-events-none opacity-50 group-hover:scale-110 transition-transform" />}
       <div className="flex items-center justify-between relative z-10">
         <span className="text-label-mono-sm font-label-mono-sm text-on-surface-variant uppercase">{label}</span>
-        <div className={`w-8 h-8 rounded-lg ${iconClassName}`}>
+        <div className={cn('w-8 h-8 rounded-lg', iconClassName)}>
           <span className="material-symbols-outlined text-[20px]">{icon}</span>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '../../utils/cn';
 
 interface FormFieldProps extends React.ComponentProps<'div'> {
   label?: string;
@@ -14,13 +15,13 @@ const FormField: React.FC<FormFieldProps> = ({
   hint,
   error,
   icon,
-  wrapperClassName = '',
+  wrapperClassName,
   children,
-  className = '',
+  className,
   ...props
 }) => {
   return (
-    <div className={`space-y-1.5 ${wrapperClassName}`} {...props}>
+    <div className={cn('space-y-1.5', wrapperClassName)} {...props}>
       {label && (
         <label className="block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">
           {label}

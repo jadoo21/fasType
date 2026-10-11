@@ -1,10 +1,31 @@
 import React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../utils/cn';
 
-interface AlertPanelProps {
+export const alertPanelStyles = cva(
+  ['p-unit-base rounded-xl'],
+  {
+    variants: {
+      tone: {
+        success: 'bg-surface-container border border-secondary text-on-surface',
+        error: 'bg-error-container border border-error/30 text-on-error-container',
+        info: 'bg-surface-container-low border border-outline-variant text-on-surface',
+      },
+    },
+    defaultVariants: { tone: 'error' },
+  },
+);
+
+const iconColorMap = {
+  success: 'text-secondary',
+  error: 'text-error',
+  info: 'text-on-surface-variant',
+} as const;
+
+interface AlertPanelProps extends VariantProps<typeof alertPanelStyles> {
   children: React.ReactNode;
   icon?: React.ReactNode;
   title?: string;
-  tone?: 'success' | 'error' | 'info';
   id?: string;
   className?: string;
 }
@@ -15,25 +36,13 @@ const AlertPanel: React.FC<AlertPanelProps> = ({
   title,
   tone = 'error',
   id,
-  className = '',
+  className,
 }) => {
-  const tones = {
-    success: 'bg-surface-container border border-secondary rounded-xl text-on-surface',
-    error: 'bg-error-container border border-error/30 rounded-xl text-on-error-container',
-    info: 'bg-surface-container-low border border-outline-variant rounded-xl text-on-surface',
-  };
-
-  const iconColors = {
-    success: 'text-secondary',
-    error: 'text-error',
-    info: 'text-on-surface-variant',
-  };
-
   return (
-    <div id={id} className={`p-unit-base ${tones[tone]} ${className}`}>
+    <div id={id} className={cn(alertPanelStyles({ tone }), className)}>
       <div className="flex items-start gap-3">
         {icon && (
-          <span className={`material-symbols-outlined ${iconColors[tone]}`}>{icon}</span>
+          <span className={`material-symbols-outlined ${iconColorMap[tone!]}`}>{icon}</span>
         )}
         <div>
           {title && (

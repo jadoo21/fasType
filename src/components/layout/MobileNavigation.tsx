@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { cn } from '../../utils/cn';
 
 interface NavLink {
   path: string;
@@ -13,6 +14,10 @@ interface MobileNavigationProps {
   isActive: (path: string) => boolean;
 }
 
+const mobileNavLinkBase = 'block w-full text-left px-3 py-2 rounded-lg font-medium text-sm transition-colors';
+const mobileNavLinkActive = 'bg-slate-100 text-slate-900';
+const mobileNavLinkInactive = 'text-slate-800 hover:bg-slate-100';
+
 function MobileNavigation({ isOpen, onClose, navLinks, isActive }: MobileNavigationProps) {
   const { user, logout } = useAuth();
 
@@ -25,11 +30,7 @@ function MobileNavigation({ isOpen, onClose, navLinks, isActive }: MobileNavigat
           key={link.path}
           to={link.path}
           onClick={onClose}
-          className={`block w-full text-left px-3 py-2 rounded-lg font-medium text-sm transition-colors ${
-            isActive(link.path)
-              ? 'bg-slate-100 text-slate-900'
-              : 'text-slate-800 hover:bg-slate-100'
-          }`}
+          className={cn(mobileNavLinkBase, isActive(link.path) ? mobileNavLinkActive : mobileNavLinkInactive)}
         >
           {link.label}
         </Link>

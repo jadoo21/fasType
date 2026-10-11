@@ -1,36 +1,43 @@
 import React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../utils/cn';
 
-interface CardProps {
+export const cardStyles = cva(
+  ['bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-level-1'],
+  {
+    variants: {
+      padding: {
+        none: '',
+        sm: 'p-4',
+        md: 'p-6',
+        lg: 'p-8',
+      },
+      variant: {
+        default: '',
+        interactive: 'hover:shadow-md transition-shadow duration-200',
+      },
+    },
+    defaultVariants: { padding: 'md', variant: 'default' },
+  },
+);
+
+type CardStyleProps = VariantProps<typeof cardStyles>;
+
+interface CardProps extends CardStyleProps {
   children: React.ReactNode;
   className?: string;
-  padding?: 'sm' | 'md' | 'lg' | 'none';
-  variant?: 'default' | 'interactive';
   tag?: React.ElementType;
 }
 
 const Card: React.FC<CardProps> = ({
   children,
-  className = '',
+  className,
   padding = 'md',
   variant = 'default',
   tag: Tag = 'div',
 }) => {
-  const baseStyles = 'bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-level-1';
-
-  const paddings = {
-    none: '',
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
-  };
-
-  const variants = {
-    default: '',
-    interactive: 'hover:shadow-md transition-shadow duration-200',
-  };
-
   return (
-    <Tag className={`${baseStyles} ${paddings[padding]} ${variants[variant]} ${className}`}>
+    <Tag className={cn(cardStyles({ padding, variant }), className)}>
       {children}
     </Tag>
   );

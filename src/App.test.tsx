@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import { PageHeader } from './components/common';
 
 test('renders the fasType typing experience', () => {
   render(
@@ -10,6 +11,20 @@ test('renders the fasType typing experience', () => {
   );
   expect(screen.getByRole('heading', { name: /Improve Your Typing/i })).toBeInTheDocument();
   expect(screen.getByRole('textbox', { name: /typing input/i })).toBeInTheDocument();
+});
+
+test('renders a shared PageHeader with badge, title, and subtitle', () => {
+  render(
+    <PageHeader
+      badgeText="Zero Latency Engine"
+      title="Improve Your Typing. One Test at a Time."
+      subtitle="Practice typing, improve your speed, and track your performance."
+    />
+  );
+
+  expect(screen.getByText(/Zero Latency Engine/i)).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /Improve Your Typing/i })).toBeInTheDocument();
+  expect(screen.getByText(/Practice typing, improve your speed/i)).toBeInTheDocument();
 });
 
 test('renders statistics page empty state with header and track your progress card', async () => {

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { cn } from '../../utils/cn';
 import Brand from './Brand';
 import MobileNavigation from './MobileNavigation';
 
@@ -10,6 +11,17 @@ const navLinks = [
   { path: '/about', label: 'About' },
   { path: '/contact', label: 'Contact' },
 ];
+
+const navLinkStyles = 'font-body text-sm transition-all';
+const navLinkActive = 'font-semibold text-primary border-b-2 border-slate-900 pb-1';
+const navLinkInactive = 'text-slate-600 hover:text-primary';
+
+const accountLinkStyles = 'flex items-center gap-2.5 px-3 py-1 bg-slate-100 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors';
+const iconButtonStyles = 'p-1.5 text-slate-600 hover:text-primary hover:bg-slate-100 rounded-lg transition-colors';
+const logoutButtonStyles = 'p-1.5 text-slate-600 hover:text-error hover:bg-rose-50 rounded-lg transition-colors';
+const loginLinkStyles = 'px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-700 hover:text-primary transition-colors';
+const signupLinkStyles = 'px-4 py-1.5 rounded-lg text-sm font-medium bg-primary text-white hover:bg-slate-800 transition-all subtle-shadow';
+const hamburgerButtonStyles = 'md:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100';
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,33 +35,23 @@ function Header() {
       <div className="container-max px-gutter-mobile md:px-gutter-desktop h-16 flex items-center justify-between w-full">
         <Brand />
 
-        {/* Desktop Primary Links */}
         <nav className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
-              className={`font-body text-sm transition-all ${
-                isActive(link.path)
-                  ? 'font-semibold text-primary border-b-2 border-slate-900 pb-1'
-                  : 'text-slate-600 hover:text-primary'
-              }`}
+              className={cn(navLinkStyles, isActive(link.path) ? navLinkActive : navLinkInactive)}
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        {/* Auth Action Cluster */}
         <div className="flex items-center gap-3">
           {user ? (
             <>
-              {/* Authenticated State */}
               <div className="hidden md:flex items-center gap-3">
-                <Link
-                  to="/statistics"
-                  className="flex items-center gap-2.5 px-3 py-1 bg-slate-100 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors"
-                >
+                <Link to="/statistics" className={accountLinkStyles}>
                   <div className="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">
                     {user.username?.charAt(0).toUpperCase() || 'U'}
                   </div>
@@ -64,14 +66,14 @@ function Header() {
                 </Link>
                 <Link
                   to="/statistics"
-                  className="p-1.5 text-slate-600 hover:text-primary hover:bg-slate-100 rounded-lg transition-colors"
+                  className={iconButtonStyles}
                   title="Profile / Dashboard"
                 >
                   <span className="material-symbols-outlined text-[20px]">account_circle</span>
                 </Link>
                 <button
                   onClick={() => void logout()}
-                  className="p-1.5 text-slate-600 hover:text-error hover:bg-rose-50 rounded-lg transition-colors"
+                  className={logoutButtonStyles}
                   title="Logout"
                 >
                   <span className="material-symbols-outlined text-[20px]">logout</span>
@@ -80,30 +82,22 @@ function Header() {
             </>
           ) : (
             <>
-              {/* Anonymous State */}
               <div className="hidden md:flex items-center gap-2">
-                <Link
-                  to="/login"
-                  className="px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-700 hover:text-primary transition-colors"
-                >
+                <Link to="/login" className={loginLinkStyles}>
                   Login
                 </Link>
-                <Link
-                  to="/signup"
-                  className="px-4 py-1.5 rounded-lg text-sm font-medium bg-primary text-white hover:bg-slate-800 transition-all subtle-shadow"
-                >
+                <Link to="/signup" className={signupLinkStyles}>
                   Sign Up
                 </Link>
               </div>
             </>
           )}
 
-          {/* Mobile Hamburger Button */}
           <button
             aria-label="Toggle menu"
             aria-expanded={isOpen}
             aria-controls="mobile-navigation"
-            className="md:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100"
+            className={hamburgerButtonStyles}
             onClick={() => setIsOpen(!isOpen)}
           >
             <span className="material-symbols-outlined text-[24px]">

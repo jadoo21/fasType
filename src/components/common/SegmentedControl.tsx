@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '../../utils/cn';
 
 interface SegmentedControlProps<T extends string | number> {
   value: T;
@@ -16,13 +17,13 @@ function SegmentedControl<T extends string | number>({
   options,
   onChange,
   leadingIcon,
-  className = '',
-  itemClassName = '',
-  activeItemClassName = '',
+  className,
+  itemClassName,
+  activeItemClassName,
   ariaLabel,
 }: SegmentedControlProps<T>) {
   return (
-    <div className={`inline-flex items-center ${className}`} role="radiogroup" aria-label={ariaLabel}>
+    <div className={cn('inline-flex items-center', className)} role="radiogroup" aria-label={ariaLabel}>
       {leadingIcon && (
         <span className="flex items-center px-2 text-slate-400">
           {leadingIcon}
@@ -35,11 +36,10 @@ function SegmentedControl<T extends string | number>({
           role="radio"
           aria-checked={value === option.value}
           onClick={() => onChange(option.value)}
-          className={`transition-all ${
-            value === option.value
-              ? activeItemClassName
-              : itemClassName
-          }`}
+          className={cn(
+            'transition-all',
+            value === option.value ? activeItemClassName : itemClassName,
+          )}
         >
           {option.label}
         </button>

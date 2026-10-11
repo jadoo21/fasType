@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '../../utils/cn';
 
 interface ProgressMeterProps {
   label: React.ReactNode;
@@ -14,18 +15,18 @@ const ProgressMeter: React.FC<ProgressMeterProps> = ({
   value,
   percent,
   indigo = false,
-  className = '',
-  barClassName = '',
+  className,
+  barClassName,
 }) => {
   return (
     <div className={className}>
       <div className="flex justify-between text-xs font-medium mb-1">
         <span className="text-slate-600">{label}</span>
-        <span className={`font-mono font-bold ${indigo ? 'text-indigo-600' : 'text-slate-900'}`}>{value}</span>
+        <span className={cn('font-mono font-bold', indigo ? 'text-indigo-600' : 'text-slate-900')}>{value}</span>
       </div>
       <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
         <div
-          className={`${indigo ? 'bg-indigo-600' : 'bg-slate-900'} h-full rounded-full ${barClassName}`}
+          className={cn(indigo ? 'bg-indigo-600' : 'bg-slate-900', 'h-full rounded-full', barClassName)}
           style={{ width: `${percent}%` }}
         />
       </div>

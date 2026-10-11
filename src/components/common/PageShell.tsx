@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '../../utils/cn';
 
 interface PageShellProps {
   children: React.ReactNode;
@@ -9,12 +10,12 @@ interface PageShellProps {
 
 const PageShell: React.FC<PageShellProps> = ({
   children,
-  className = '',
+  className,
   as: Tag = 'div',
   fullWidth = false,
 }) => {
   return (
-    <Tag className={`max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop ${fullWidth ? '' : ''} ${className}`}>
+    <Tag className={cn('max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop', !fullWidth && '', className)}>
       {children}
     </Tag>
   );

@@ -8,4 +8,5 @@ export { default as ProgressMeter } from './ProgressMeter';
 export { default as SegmentedControl } from './SegmentedControl';
 export { default as FormField } from './FormField';
 export { default as MetricCard } from './MetricCard';
+export { default as PageHeader } from './PageHeader';
 export { AppModal } from './modal';

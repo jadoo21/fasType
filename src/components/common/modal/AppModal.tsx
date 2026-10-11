@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { cn } from '../../../utils/cn';
 
 interface AppModalProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ const AppModal: React.FC<AppModalProps> = ({
   children,
   title,
   icon,
-  className = '',
+  className,
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
@@ -48,7 +49,7 @@ const AppModal: React.FC<AppModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
-      <div ref={dialogRef} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby={title ? 'modal-title' : undefined} className={`w-full max-w-lg max-h-[calc(100vh-2rem)] overflow-y-auto bg-surface-container-lowest border border-slate-300 rounded-2xl p-6 sm:p-8 shadow-2xl transform transition-all duration-200 ${className}`}>
+      <div ref={dialogRef} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby={title ? 'modal-title' : undefined} className={cn('w-full max-w-lg max-h-[calc(100vh-2rem)] overflow-y-auto bg-surface-container-lowest border border-slate-300 rounded-2xl p-6 sm:p-8 shadow-2xl transform transition-all duration-200', className)}>
         {title && (
           <div className="flex items-start justify-between mb-unit-md">
             <div className="flex items-center gap-unit-sm">

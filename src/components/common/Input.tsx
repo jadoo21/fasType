@@ -1,4 +1,8 @@
 import React from 'react';
+import { cn } from '../../utils/cn';
+
+const fieldLabel = 'block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase';
+const baseInput = 'w-full px-3.5 py-2.5 bg-surface-container-lowest border rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -15,7 +19,7 @@ const Input: React.FC<InputProps> = ({
   error,
   hint,
   icon,
-  className = '',
+  className,
   id,
   as = 'input',
   rows,
@@ -28,10 +32,7 @@ const Input: React.FC<InputProps> = ({
     return (
       <div className="space-y-1.5">
         {label && (
-          <label
-            htmlFor={inputId}
-            className="block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase"
-          >
+          <label htmlFor={inputId} className={fieldLabel}>
             {label}
           </label>
         )}
@@ -39,9 +40,7 @@ const Input: React.FC<InputProps> = ({
           id={inputId}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
-          className={`w-full px-3.5 py-2.5 bg-surface-container-lowest border rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all resize-y ${
-            error ? 'border-error' : 'border-outline-variant'
-          } ${className}`}
+          className={cn(baseInput, 'resize-y', error ? 'border-error' : 'border-outline-variant', className)}
           rows={rows}
           maxLength={maxLength}
           {...(props as any)}
@@ -62,10 +61,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <div className="space-y-1.5">
       {label && (
-        <label
-          htmlFor={inputId}
-          className="block font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase"
-        >
+        <label htmlFor={inputId} className={fieldLabel}>
           {label}
         </label>
       )}
@@ -79,9 +75,7 @@ const Input: React.FC<InputProps> = ({
           id={inputId}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
-          className={`w-full px-3.5 py-2.5 bg-surface-container-lowest border rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all ${
-            error ? 'border-error' : 'border-outline-variant'
-          } ${icon ? 'pl-10' : ''} ${className}`}
+          className={cn(baseInput, error ? 'border-error' : 'border-outline-variant', icon && 'pl-10', className)}
           {...props}
         />
       </div>

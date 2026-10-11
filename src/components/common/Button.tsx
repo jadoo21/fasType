@@ -1,9 +1,36 @@
 import React from 'react';
 import { Button as ReactstrapButton } from 'reactstrap';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../utils/cn';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
+const buttonStyles = cva(
+  [
+    'inline-flex items-center justify-center gap-2',
+    'font-body text-body-sm font-medium rounded-xl',
+    'transition-all duration-150 active:scale-[0.98]',
+    'disabled:opacity-50 disabled:cursor-not-allowed',
+  ],
+  {
+    variants: {
+      variant: {
+        primary: 'bg-primary text-on-primary hover:bg-on-surface-variant shadow-sm',
+        secondary: 'border border-outline bg-surface-container-lowest text-primary hover:bg-surface-container-low',
+        ghost: 'text-primary hover:bg-surface-container-low',
+        danger: 'bg-error text-on-error hover:bg-error/90',
+      },
+      size: {
+        sm: 'px-3 py-1.5 text-xs',
+        md: 'px-4 py-2 text-sm',
+        lg: 'px-6 py-3 text-sm',
+      },
+    },
+    defaultVariants: { variant: 'primary', size: 'md' },
+  },
+);
+
+type ButtonStyleProps = VariantProps<typeof buttonStyles>;
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, ButtonStyleProps {
   loading?: boolean;
   icon?: React.ReactNode;
   tag?: React.ElementType;
@@ -15,31 +42,16 @@ const Button: React.FC<ButtonProps> = ({
   loading = false,
   icon,
   children,
-  className = '',
+  className,
   disabled,
   tag,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center gap-2 font-body text-body-sm font-medium rounded-xl transition-all duration-150 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed';
-
-  const variants = {
-    primary: 'bg-primary text-on-primary hover:bg-on-surface-variant shadow-sm',
-    secondary: 'border border-outline bg-surface-container-lowest text-primary hover:bg-surface-container-low',
-    ghost: 'text-primary hover:bg-surface-container-low',
-    danger: 'bg-error text-on-error hover:bg-error/90',
-  };
-
-  const sizes = {
-    sm: 'px-3 py-1.5 text-xs',
-    md: 'px-4 py-2 text-sm',
-    lg: 'px-6 py-3 text-sm',
-  };
-
   return (
     <ReactstrapButton
       type={props.type ?? 'button'}
       color="link"
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+      className={cn(buttonStyles({ variant, size }), className)}
       disabled={disabled || loading}
       tag={tag}
       {...(props as any)}

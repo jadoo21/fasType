@@ -3,7 +3,55 @@ import { Link } from 'react-router-dom';
 import { useTypingTest } from '../contexts/TypingTestContext';
 import { useAuth } from '../contexts/AuthContext';
 import { typingTestApi } from '../services/api';
-import { AppModal, Button } from '../components/common';
+import { cn } from '../utils/cn';
+import { AppModal, Button, PageHeader } from '../components/common';
+
+const page = 'max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-8 space-y-8';
+const hero = 'text-center max-w-3xl mx-auto space-y-3';
+const heroBadge = 'inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 font-mono text-xs text-slate-700';
+const heroTitle = 'text-3xl sm:text-4xl font-headline font-bold tracking-tight text-slate-900';
+const heroSubtitle = 'text-sm sm:text-base text-slate-600 font-body';
+const heroSubtitleLg = 'text-base text-slate-600 max-w-2xl mx-auto font-body';
+const metricRibbon = 'flex flex-wrap items-center justify-center gap-2 pt-1';
+const metricItem = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 card-shadow text-xs';
+const metricLabel = 'text-slate-500 font-medium';
+const metricValue = 'font-mono font-bold text-slate-900';
+const metricValueAccent = 'font-mono font-bold text-indigo-600';
+const segmentContainer = 'flex items-center p-1 bg-white rounded-xl border border-slate-200 card-shadow';
+const segmentIcon = 'font-mono text-xs text-slate-400 px-2 flex items-center';
+const segmentItemBase = 'px-3 py-1 rounded-lg text-xs font-medium transition-all';
+const segmentItemActive = 'bg-slate-900 text-white shadow-xs';
+const segmentItemInactive = 'text-slate-600 hover:text-slate-900';
+const segmentsRow = 'pt-3 flex flex-wrap items-center justify-center gap-2';
+const testSection = 'max-w-7xl mx-auto w-full';
+const testCard = 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden relative';
+const testCardHeader = 'px-6 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50/60';
+const testCardTitle = 'font-headline text-sm font-bold text-slate-900';
+const testStatusBar = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-mono text-[11px] bg-slate-100 text-slate-600 border border-slate-200';
+const restartHint = 'hidden sm:flex items-center gap-1.5 text-xs text-slate-500 font-mono';
+const restartButton = 'p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all active:rotate-180';
+const hudGrid = 'grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-200 border-b border-slate-200';
+const hudCell = 'bg-white p-4 flex flex-col justify-center';
+const hudLabel = 'font-mono text-xs text-slate-500 font-medium tracking-wider';
+const hudValue = 'font-mono text-3xl sm:text-4xl font-bold text-slate-900';
+const hudBar = 'w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden';
+const hudBarFill = 'bg-indigo-600 h-full rounded-full';
+const typingArena = 'p-6 sm:p-10 bg-white select-none relative cursor-text';
+const typingStream = 'font-type-test-stream-mobile sm:font-type-test-stream leading-relaxed tracking-wide transition-all';
+const legendBar = 'mt-6 flex flex-wrap items-center justify-between pt-4 border-t border-dashed border-slate-200 text-xs text-slate-500 font-mono gap-2';
+const inputArea = 'p-6 bg-slate-50 border-t border-slate-200';
+const typingInput = 'w-full px-5 py-3.5 bg-white border border-slate-300 rounded-xl text-lg font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all subtle-shadow';
+const startHint = 'text-xs font-mono text-indigo-600 hover:text-indigo-800 flex items-center gap-1';
+const scoreCard = 'p-3 rounded-xl bg-slate-50 border border-slate-200 text-center';
+const scoreLabel = 'font-mono text-[10px] text-slate-500 uppercase';
+const scoreValue = 'font-mono text-xl font-bold mt-0.5';
+const meterTrack = 'w-full bg-slate-200 h-1.5 rounded-full overflow-hidden';
+const meterFill = 'h-full rounded-full';
+const authPrompt = 'p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200 mb-5';
+const ctaSection = 'max-w-7xl mx-auto w-full text-center pt-2';
+const ctaCard = 'p-4 rounded-xl bg-slate-100 border border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-left';
+const ctaLink = 'px-4 py-2 rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-xs font-semibold text-slate-900 transition-all shrink-0 card-shadow';
+const statusDot = 'w-2 h-2 rounded-full';
 
 function Home() {
   const {
@@ -64,57 +112,44 @@ function Home() {
   const timeProgress = (timeElapsed / duration) * 100;
   const completedSeconds = startTime ? Math.max(1, Math.round(((Date.now()) - startTime) / 1000)) : duration;
 
-  return (
-    <div className="max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-8 space-y-8">
-      {/* Hero Header */}
-      <section className="text-center max-w-3xl mx-auto space-y-3">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 font-mono text-xs text-slate-700">
-          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
-          Zero Latency Engine • Pure Mechanical Flow
-        </div>
+  const statusDotColor = isCompleted ? 'bg-emerald-500' : isStarted ? 'bg-indigo-500' : 'bg-slate-400';
+  const statusLabel = isCompleted ? 'Completed' : isStarted ? 'In Progress' : 'Ready';
 
-        {/* Greeting */}
+  return (
+    <div className={page}>
+      <section className={hero}>
         {isAuthenticated && user ? (
-          <div className="space-y-3">
-            <h1 className="text-3xl sm:text-4xl font-headline font-bold tracking-tight text-slate-900 flex items-center justify-center gap-2">
-              Welcome back, {user.username} 👋
-            </h1>
-            <p className="text-sm sm:text-base text-slate-600 font-body">
-              Ready for another typing test? Push your cadence to new heights.
-            </p>
-            {/* Compact Inline Metrics Ribbon */}
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 card-shadow text-xs">
-                <span className="text-slate-500 font-medium">Current Best:</span>
-                <span className="font-mono font-bold text-slate-900">{user.bestWpm || 0} WPM</span>
+          <PageHeader
+            badgeText="Zero Latency Engine • Pure Mechanical Flow"
+            title={<span className="inline-flex items-center justify-center gap-2">Welcome back, {user.username} 👋</span>}
+            subtitle="Ready for another typing test? Push your cadence to new heights."
+          >
+            <div className={metricRibbon}>
+              <div className={metricItem}>
+                <span className={metricLabel}>Current Best:</span>
+                <span className={metricValue}>{user.bestWpm || 0} WPM</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 card-shadow text-xs">
-                <span className="text-slate-500 font-medium">Average:</span>
-                <span className="font-mono font-bold text-slate-900">{user.averageWpm || 0} WPM</span>
+              <div className={metricItem}>
+                <span className={metricLabel}>Average:</span>
+                <span className={metricValue}>{user.averageWpm || 0} WPM</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 card-shadow text-xs">
-                <span className="text-slate-500 font-medium">Accuracy:</span>
-                <span className="font-mono font-bold text-indigo-600">{user.averageAccuracy || 0}%</span>
+              <div className={metricItem}>
+                <span className={metricLabel}>Accuracy:</span>
+                <span className={metricValueAccent}>{user.averageAccuracy || 0}%</span>
               </div>
             </div>
-          </div>
+          </PageHeader>
         ) : (
-          <div className="space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-headline font-bold tracking-tight text-slate-900">
-              Improve Your Typing. One Test at a Time.
-            </h1>
-            <p className="text-base text-slate-600 max-w-2xl mx-auto font-body">
-              Practice typing, improve your speed, and track your performance. No account required. Start practicing instantly.
-            </p>
-          </div>
+          <PageHeader
+            badgeText="Zero Latency Engine • Pure Mechanical Flow"
+            title="Improve Your Typing. One Test at a Time."
+            subtitle="Practice typing, improve your speed, and track your performance. No account required. Start practicing instantly."
+          />
         )}
 
-        {/* Quick Mode Pill Switchers */}
-        <div className="pt-3 flex flex-wrap items-center justify-center gap-2">
-          {/* Duration Segment */}
-          <div className="flex items-center p-1 bg-white rounded-xl border border-slate-200 card-shadow">
-            <span className="font-mono text-xs text-slate-400 px-2 flex items-center">
+        <div className={segmentsRow}>
+          <div className={segmentContainer}>
+            <span className={segmentIcon}>
               <span className="material-symbols-outlined text-[15px]">timer</span>
             </span>
             {[15, 30, 60].map((d) => (
@@ -122,23 +157,18 @@ function Home() {
                 key={d}
                 type="button"
                 onClick={() => setDuration(d)}
-                className={`px-3 py-1 rounded-lg text-xs font-mono font-medium transition-all ${
-                  duration === d
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                className={cn(segmentItemBase, 'font-mono', duration === d ? segmentItemActive : segmentItemInactive)}
               >
                 {d}s
               </button>
             ))}
-            <button type="button" onClick={() => setDuration(120)} className="px-3 py-1 rounded-lg text-xs font-mono font-medium text-slate-600 hover:text-slate-900 transition-all">
+            <button type="button" onClick={() => setDuration(120)} className={cn(segmentItemBase, 'font-mono', segmentItemInactive)}>
               Custom
             </button>
           </div>
 
-          {/* Difficulty Segment */}
-          <div className="flex items-center p-1 bg-white rounded-xl border border-slate-200 card-shadow">
-            <span className="font-mono text-xs text-slate-400 px-2 flex items-center">
+          <div className={segmentContainer}>
+            <span className={segmentIcon}>
               <span className="material-symbols-outlined text-[15px]">tune</span>
             </span>
             {(['easy', 'medium', 'hard'] as const).map((d) => (
@@ -146,20 +176,15 @@ function Home() {
                 key={d}
                 type="button"
                 onClick={() => setDifficulty(d)}
-                className={`px-3 py-1 rounded-lg text-xs font-medium transition-all capitalize ${
-                  difficulty === d
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                className={cn(segmentItemBase, 'capitalize', difficulty === d ? segmentItemActive : segmentItemInactive)}
               >
                 {d}
               </button>
             ))}
           </div>
 
-          {/* Corpus Mode Segment */}
-          <div className="flex items-center p-1 bg-white rounded-xl border border-slate-200 card-shadow">
-            <span className="font-mono text-xs text-slate-400 px-2 flex items-center">
+          <div className={segmentContainer}>
+            <span className={segmentIcon}>
               <span className="material-symbols-outlined text-[15px]">article</span>
             </span>
             {(['words', 'quotes', 'code'] as const).map((m) => (
@@ -167,11 +192,7 @@ function Home() {
                 key={m}
                 type="button"
                 onClick={() => setMode(m)}
-                className={`px-3 py-1 rounded-lg text-xs font-medium transition-all capitalize ${
-                  mode === m
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                className={cn(segmentItemBase, 'capitalize', mode === m ? segmentItemActive : segmentItemInactive)}
               >
                 {m}
               </button>
@@ -180,24 +201,22 @@ function Home() {
         </div>
       </section>
 
-      {/* Typing Test Card */}
-      <section className="max-w-7xl mx-auto w-full">
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden relative">
-          {/* Card Header Bar */}
-          <div className="px-6 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50/60">
+      <section className={testSection}>
+        <div className={testCard}>
+          <div className={testCardHeader}>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-indigo-600 text-[20px]">keyboard</span>
-                <span className="font-headline text-sm font-bold text-slate-900">Typing Test</span>
+                <span className={testCardTitle}>Typing Test</span>
               </div>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-mono text-[11px] bg-slate-100 text-slate-600 border border-slate-200">
-                <span className={`w-2 h-2 rounded-full ${isCompleted ? 'bg-emerald-500' : isStarted ? 'bg-indigo-500' : 'bg-slate-400'}`}></span>
-                {isCompleted ? 'Completed' : isStarted ? 'In Progress' : 'Ready'}
+              <span className={testStatusBar}>
+                <span className={cn(statusDot, statusDotColor)}></span>
+                {statusLabel}
               </span>
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 font-mono">
+              <div className={restartHint}>
                 <kbd className="px-2 py-0.5 bg-slate-100 rounded tactile-keycap border border-slate-300 text-[10px] text-slate-700">Tab + Enter</kbd>
                 <span>to restart</span>
               </div>
@@ -205,7 +224,7 @@ function Home() {
                 type="button"
                 onClick={resetTest}
                 aria-label="Restart test"
-                className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all active:rotate-180"
+                className={restartButton}
                 title="Restart Test (Tab + Enter)"
               >
                 <span className="material-symbols-outlined text-[20px]">replay</span>
@@ -213,29 +232,26 @@ function Home() {
             </div>
           </div>
 
-          {/* Telemetry Real-time HUD Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-200 border-b border-slate-200">
-            {/* TIME */}
-            <div className="bg-white p-4 flex flex-col justify-center">
-              <span className="font-mono text-xs text-slate-500 font-medium tracking-wider">TIME</span>
+          <div className={hudGrid}>
+            <div className={hudCell}>
+              <span className={hudLabel}>TIME</span>
               <div className="flex items-baseline gap-1 mt-1">
-                <span className="font-mono text-3xl sm:text-4xl font-bold text-slate-900">
+                <span className={hudValue}>
                   {timeRemaining}
                   <span className="text-sm font-normal text-slate-500">s</span>
                 </span>
               </div>
-              <div className="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
+              <div className={hudBar}>
                 <div
-                  className="bg-indigo-600 h-full rounded-full transition-all duration-300"
+                  className={cn(hudBarFill, 'transition-all duration-300')}
                   style={{ width: `${Math.max(0, 100 - timeProgress)}%` }}
                 ></div>
               </div>
             </div>
 
-            {/* WPM */}
-            <div className="bg-white p-4 flex flex-col justify-center">
+            <div className={hudCell}>
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs text-slate-500 font-medium tracking-wider">WPM</span>
+                <span className={hudLabel}>WPM</span>
                 {isStarted && (
                   <span className="text-[10px] font-mono text-indigo-600 flex items-center">
                     <span className="material-symbols-outlined text-[12px]">trending_up</span> live
@@ -243,7 +259,7 @@ function Home() {
                 )}
               </div>
               <div className="flex items-baseline gap-1 mt-1">
-                <span className="font-mono text-3xl sm:text-4xl font-bold text-slate-900">{wpm}</span>
+                <span className={hudValue}>{wpm}</span>
               </div>
               <div className="h-3 w-full mt-1.5">
                 <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 20">
@@ -252,23 +268,21 @@ function Home() {
               </div>
             </div>
 
-            {/* ACCURACY */}
-            <div className="bg-white p-4 flex flex-col justify-center">
-              <span className="font-mono text-xs text-slate-500 font-medium tracking-wider">ACCURACY</span>
+            <div className={hudCell}>
+              <span className={hudLabel}>ACCURACY</span>
               <div className="flex items-baseline gap-1 mt-1">
                 <span className="font-mono text-3xl sm:text-4xl font-bold text-indigo-600">
                   {accuracy}
                   <span className="text-sm font-normal text-slate-500">%</span>
                 </span>
               </div>
-              <div className="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
-                <div className="bg-indigo-600 h-full rounded-full" style={{ width: `${accuracy}%` }}></div>
+              <div className={hudBar}>
+                <div className={hudBarFill} style={{ width: `${accuracy}%` }}></div>
               </div>
             </div>
 
-            {/* ERRORS */}
-            <div className="bg-white p-4 flex flex-col justify-center">
-              <span className="font-mono text-xs text-slate-500 font-medium tracking-wider">ERRORS</span>
+            <div className={hudCell}>
+              <span className={hudLabel}>ERRORS</span>
               <div className="flex items-baseline gap-1 mt-1">
                 <span className="font-mono text-3xl sm:text-4xl font-bold text-rose-600">{errors}</span>
               </div>
@@ -276,9 +290,8 @@ function Home() {
             </div>
           </div>
 
-          {/* Typing Stream Arena */}
-          <div className="p-6 sm:p-10 bg-white select-none relative cursor-text">
-            <div className="font-type-test-stream-mobile sm:font-type-test-stream leading-relaxed tracking-wide transition-all">
+          <div className={typingArena}>
+            <div className={typingStream}>
               {text.split('').map((char, index) => (
                 <span key={index} className={getCharacterClass(index)}>
                   {char}
@@ -286,8 +299,7 @@ function Home() {
               ))}
             </div>
 
-            {/* Color Guide Legend */}
-            <div className="mt-6 flex flex-wrap items-center justify-between pt-4 border-t border-dashed border-slate-200 text-xs text-slate-500 font-mono gap-2">
+            <div className={legendBar}>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
                 <span>Emerald: Correct</span>
@@ -305,8 +317,7 @@ function Home() {
             </div>
           </div>
 
-          {/* Live Input Field */}
-          <div className="p-6 bg-slate-50 border-t border-slate-200">
+          <div className={inputArea}>
             <div className="relative max-w-2xl mx-auto">
               <input
                 type="text"
@@ -316,7 +327,7 @@ function Home() {
                 spellCheck={false}
                 placeholder="Start typing here..."
                 aria-label="Typing input"
-                className="w-full px-5 py-3.5 bg-white border border-slate-300 rounded-xl text-lg font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all subtle-shadow"
+                className={typingInput}
                 disabled={isCompleted}
                 value={typedText}
                 readOnly
@@ -335,7 +346,7 @@ function Home() {
                 <button
                   type="button"
                   onClick={startTest}
-                  className="text-xs font-mono text-indigo-600 hover:text-indigo-800 flex items-center gap-1"
+                  className={startHint}
                 >
                   <span className="material-symbols-outlined text-[14px]">play_arrow</span> Click here or start typing to begin
                 </button>
@@ -358,7 +369,7 @@ function Home() {
           <Meter label="Accuracy & Rhythm Stability" value={`${accuracy}%`} percent={accuracy} indigo />
         </div>
         {!isAuthenticated && (
-          <div className="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200 mb-5">
+          <div className={authPrompt}>
             <p className="text-xs font-semibold text-slate-900">Want to track your progress?</p>
             <p className="text-xs text-slate-600 mt-0.5">Create a free account to automatically save your typing history and rhythm charts.</p>
             <div className="flex items-center gap-2 mt-2.5">
@@ -373,16 +384,15 @@ function Home() {
         </div>
       </AppModal>
 
-      {/* Link to Statistics */}
-      <section className="max-w-7xl mx-auto w-full text-center pt-2">
-        <div className="p-4 rounded-xl bg-slate-100 border border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+      <section className={ctaSection}>
+        <div className={ctaCard}>
           <div>
             <h4 className="font-headline font-semibold text-sm text-slate-900">Looking for deep trends and analytics?</h4>
             <p className="text-xs text-slate-600">Explore comprehensive speed charts, accuracy heatmaps, and test logs on your dedicated telemetry page.</p>
           </div>
           <Link
             to="/statistics"
-            className="px-4 py-2 rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-xs font-semibold text-slate-900 transition-all shrink-0 card-shadow"
+            className={ctaLink}
           >
             Open Statistics Page →
           </Link>
@@ -393,11 +403,26 @@ function Home() {
 }
 
 function Score({ label, value, tone = 'text-slate-900' }: { label: string; value: React.ReactNode; tone?: string }) {
-  return <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center"><span className="font-mono text-[10px] text-slate-500 uppercase">{label}</span><p className={`font-mono text-xl font-bold mt-0.5 ${tone}`}>{value}</p></div>;
+  return (
+    <div className={scoreCard}>
+      <span className={scoreLabel}>{label}</span>
+      <p className={cn(scoreValue, tone)}>{value}</p>
+    </div>
+  );
 }
 
 function Meter({ label, value, percent, indigo = false }: { label: string; value: string; percent: number; indigo?: boolean }) {
-  return <div><div className="flex justify-between text-xs font-medium mb-1"><span className="text-slate-600">{label}</span><span className={`font-mono font-bold ${indigo ? 'text-indigo-600' : 'text-slate-900'}`}>{value}</span></div><div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden"><div className={`${indigo ? 'bg-indigo-600' : 'bg-slate-900'} h-full rounded-full`} style={{ width: `${percent}%` }} /></div></div>;
+  return (
+    <div>
+      <div className="flex justify-between text-xs font-medium mb-1">
+        <span className="text-slate-600">{label}</span>
+        <span className={cn('font-mono font-bold', indigo ? 'text-indigo-600' : 'text-slate-900')}>{value}</span>
+      </div>
+      <div className={meterTrack}>
+        <div className={cn(meterFill, indigo ? 'bg-indigo-600' : 'bg-slate-900')} style={{ width: `${percent}%` }} />
+      </div>
+    </div>
+  );
 }
 
 export default Home;

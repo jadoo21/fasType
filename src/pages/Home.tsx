@@ -7,11 +7,6 @@ import { cn } from '../utils/cn';
 import { AppModal, Button, PageHeader } from '../components/common';
 
 const page = 'max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-8 space-y-8';
-const hero = 'text-center max-w-3xl mx-auto space-y-3';
-const heroBadge = 'inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 font-mono text-xs text-slate-700';
-const heroTitle = 'text-3xl sm:text-4xl font-headline font-bold tracking-tight text-slate-900';
-const heroSubtitle = 'text-sm sm:text-base text-slate-600 font-body';
-const heroSubtitleLg = 'text-base text-slate-600 max-w-2xl mx-auto font-body';
 const metricRibbon = 'flex flex-wrap items-center justify-center gap-2 pt-1';
 const metricItem = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 card-shadow text-xs';
 const metricLabel = 'text-slate-500 font-medium';
@@ -117,7 +112,7 @@ function Home() {
 
   return (
     <div className={page}>
-      <section className={hero}>
+      <section className="text-center max-w-3xl mx-auto space-y-3">
         {isAuthenticated && user ? (
           <PageHeader
             badgeText="Zero Latency Engine • Pure Mechanical Flow"

@@ -6,10 +6,6 @@ import { cn } from '../utils/cn';
 
 const page = "max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-unit-2xl";
 const header = "mb-unit-2xl max-w-3xl mx-auto text-center flex flex-col items-center";
-const badge = "inline-flex items-center gap-2 px-2.5 py-1 rounded bg-surface-container-high border border-outline-variant text-label-mono-sm font-label-mono-sm text-on-primary-fixed-variant mb-unit-sm";
-const pulseDot = "inline-block w-2 h-2 rounded-full bg-secondary animate-pulse";
-const pageTitle = "text-headline-lg font-headline-lg text-primary tracking-tight mb-unit-sm";
-const pageDesc = "text-body-lg font-body-lg text-on-surface-variant";
 const grid = "grid grid-cols-1 lg:grid-cols-12 gap-unit-xl items-start";
 const leftCol = "lg:col-span-5 space-y-unit-lg";
 const infoCard = "bg-surface-container-lowest border border-outline-variant rounded-xl p-unit-lg shadow-sm relative overflow-hidden";

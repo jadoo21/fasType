@@ -16,11 +16,7 @@ const errorIconContainer = 'w-16 h-16 rounded-2xl bg-rose-50 flex items-center j
 const errorIcon = 'material-symbols-outlined text-[32px]';
 const errorTitle = 'text-xl font-headline font-bold text-slate-900';
 const errorDescription = 'text-sm text-slate-600 max-w-md mx-auto';
-const badge = 'inline-flex items-center gap-unit-sm px-unit-md py-unit-xs bg-surface-container rounded-full border border-outline-variant text-on-surface-variant mb-unit-lg shadow-sm';
-const badgeDot = 'inline-block w-2 h-2 rounded-full bg-secondary animate-pulse';
-const badgeText = 'font-label-mono-sm text-label-mono-sm text-on-surface font-semibold tracking-wider uppercase';
-const pageTitle = 'text-headline-lg font-headline-lg text-on-surface tracking-tight';
-const pageSubtitle = 'text-body-md font-body-md text-on-surface-variant mt-1';
+
 const timeframeContainer = 'inline-flex p-1 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-sm font-body-sm';
 const timeframeButtonBase = 'px-unit-md py-1 rounded-lg transition-colors';
 const timeframeButtonActive = 'bg-primary text-surface-container-lowest font-medium shadow-sm';

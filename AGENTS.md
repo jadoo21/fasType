@@ -1,6 +1,6 @@
 # fasType
 
-TypeScript React SPA (CRA, react-scripts 5). No lib folder, no monorepo, no CI/CD.
+TypeScript React SPA (CRA, react-scripts 5). No lib folder, no monorepo. CI/CD via GitHub Actions in `.github/workflows/`.
 
 ## Commands
 

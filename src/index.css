@@ -1,13 +1,157 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
+    margin: 0;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-background text-on-surface font-body text-body-md min-h-screen flex flex-col;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  ::selection {
+    @apply bg-slate-200 text-primary;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-secondary/30 ring-offset-2;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #c6c6cd;
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #76777d;
+  }
+}
+
+@layer components {
+  /* Material Symbols */
+  .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 1;
+    display: inline-block;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Tactile keycap style */
+  .tactile-keycap {
+    @apply bg-slate-100 border border-slate-300 shadow-[0_2px_0_0_#cbd5e1,0_3px_6px_-1px_rgba(15,23,42,0.08)] rounded px-2 py-0.5 text-[10px] text-slate-700 font-mono font-medium;
+  }
+
+  /* Card shadow */
+  .card-shadow {
+    @apply shadow-card;
+  }
+
+  /* Subtle shadow */
+  .subtle-shadow {
+    @apply shadow-subtle;
+  }
+
+  /* Focus glow */
+  .focus-glow {
+    @apply shadow-focus-glow;
+  }
+
+  /* Caret blink animation */
+  .caret-blink {
+    @apply animate-blink;
+  }
+
+  /* SPA view transition */
+  .spa-view {
+    @apply animate-fade-in;
+  }
+
+  /* No scrollbar */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  /* Text gradient utilities */
+  .text-gradient-indigo {
+    @apply bg-gradient-to-r from-secondary to-indigo-400 bg-clip-text text-transparent;
+  }
+
+  .text-gradient-cyan {
+    @apply bg-gradient-to-r from-cyan-500 to-teal-400 bg-clip-text text-transparent;
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply bg-white/60 backdrop-blur-sm border border-slate-200/80;
+  }
+
+  /* Container */
+  .container-max {
+    @apply max-w-container-max mx-auto;
+  }
+
+  /* Gutter */
+  .gutter-mobile {
+    @apply px-gutter-mobile;
+  }
+
+  .gutter-desktop {
+    @apply px-gutter-desktop;
+  }
 }

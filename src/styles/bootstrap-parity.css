@@ -1,0 +1,200 @@
+/*
+ * Bootstrap Parity Rules
+ * Neutralize Reactstrap/Bootstrap defaults that conflict with Tailwind/stitch tokens.
+ * Only rules needed to prevent visual drift are included here.
+ */
+
+/* Reset Bootstrap box-sizing to match Tailwind's preflight */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Neutralize Bootstrap .btn defaults — our Button component uses Tailwind classes */
+.btn {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  box-shadow: none;
+}
+
+/* Neutralize Bootstrap .form-control defaults */
+.form-control,
+.form-select {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Neutralize Bootstrap .card defaults */
+.card {
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.card-body {
+  padding: 0;
+}
+
+/* Neutralize Bootstrap .badge defaults */
+.badge {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  border: none;
+}
+
+/* Neutralize Bootstrap .form-label */
+.form-label {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+/* Neutralize Bootstrap .form-check */
+.form-check {
+  display: block;
+  min-height: auto;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+/* Neutralize Bootstrap .form-check-input */
+.form-check-input {
+  width: auto;
+  height: auto;
+  margin: 0;
+  vertical-align: middle;
+}
+
+/* Neutralize Bootstrap .form-check-label */
+.form-check-label {
+  margin-bottom: 0;
+}
+
+/* Neutralize Bootstrap .form-text */
+.form-text {
+  font-size: inherit;
+  color: inherit;
+  margin-top: 0;
+}
+
+/* Neutralize Bootstrap .form-feedback */
+.form-feedback {
+  font-size: inherit;
+  margin-top: 0;
+}
+
+/* Neutralize Bootstrap .alert defaults */
+.alert {
+  border-radius: 0;
+  border: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+/* Neutralize Bootstrap .container defaults */
+.container,
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: none;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Neutralize Bootstrap .row */
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Neutralize Bootstrap .col */
+[class*="col-"] {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Neutralize Bootstrap .progress */
+.progress {
+  background: none;
+  border-radius: 0;
+  height: auto;
+  overflow: visible;
+}
+
+/* Neutralize Bootstrap .progress-bar */
+.progress-bar {
+  background: none;
+  border: none;
+  transition: none;
+}
+
+/* Neutralize Bootstrap .modal defaults */
+.modal {
+  padding: 0 !important;
+  background: none !important;
+}
+
+.modal-dialog {
+  margin: 0;
+  max-width: none;
+  padding: 0;
+}
+
+.modal-content {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+  padding: 0;
+  border: none;
+}
+
+/* Neutralize Bootstrap .nav-link */
+.nav-link {
+  padding: 0;
+  color: inherit;
+  text-decoration: none;
+  background: none;
+  border: none;
+}
+
+/* Neutralize Bootstrap .navbar */
+.navbar {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.navbar-expand {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+/* Neutralize Bootstrap .btn-group */
+.btn-group {
+  box-shadow: none;
+}
